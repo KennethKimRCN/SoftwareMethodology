@@ -1,9 +1,10 @@
 public class Pawn extends ChessPiece{
 	boolean hasMoved = false;
 	
-	public pawn(int x, int y) {
+	public pawn(int x, int y, char c) {
 		xpos = x;
 		ypos = y;
+		team = c;
 	}
 	
 	public boolean move(int x, int y) {
