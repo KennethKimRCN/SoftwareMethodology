@@ -1,13 +1,13 @@
 //needs implement: en passant
 
-public class Pawn extends ChessPiece{
+public class pawn extends ChessPiece{
 	boolean hasMoved = false;
 	
 	public pawn(int x, int y,char t) {
 		super(x,y,t);
 	}
 	
-	public boolean move(int x, int y) {
+	public boolean move(int x, int y, ChessSquare[][] chessBoard) {
 		
 		if(((x>=8)||(x<0))||((y>=8)||(y<0))) {
 			return false;
@@ -38,6 +38,10 @@ public class Pawn extends ChessPiece{
 				xpos = x;
 				ypos = y;
 				hasMoved = true;
+				
+				if(y==7) {
+					promote(chessBoard);
+				}
 				return true;
 			}
 		}
@@ -54,6 +58,10 @@ public class Pawn extends ChessPiece{
 				chessBoard[x][y].occupy(this);
 				
 				hasMoved = true;
+				
+				if(y==7) {
+					promote(chessBoard);
+				}
 				return true;
 			}
 			else {
@@ -68,6 +76,42 @@ public class Pawn extends ChessPiece{
 	
 	public String getDisplay() {
 		return team+"p"+" ";
+	}
+	
+	public boolean promote(ChessSquare[][] chessBoard) {
+		ChessPiece x = new Queen(xpos, ypos, team);
+		chessBoard[xpos][ypos].unoccupy();
+		chessBoard[xpos][ypos].occupy(x);
+		return true;
+	}
+	
+	public boolean promote(ChessSquare[][] chessBoard,char type) {
+		if(type=='N') {
+			ChessPiece x = new Knight(xpos, ypos, team);
+			chessBoard[xpos][ypos].unoccupy();
+			chessBoard[xpos][ypos].occupy(x);
+			return true;
+		}
+		else if(type=='B') {
+			ChessPiece x = new Bishop(xpos, ypos, team);
+			chessBoard[xpos][ypos].unoccupy();
+			chessBoard[xpos][ypos].occupy(x);
+			return true;
+		}
+		else if(type=='R') {
+			ChessPiece x = new Rook(xpos, ypos, team);
+			chessBoard[xpos][ypos].unoccupy();
+			chessBoard[xpos][ypos].occupy(x);
+			return true;
+		}
+		
+		
+		else {
+		ChessPiece x = new Queen(xpos, ypos, team);
+		chessBoard[xpos][ypos].unoccupy();
+		chessBoard[xpos][ypos].occupy(x);
+		return true;
+		}
 	}
 	
 }
