@@ -4,7 +4,7 @@ public class Knight extends ChessPiece{
 		super(x,y,t);
 	}
 	
-	public boolean move(int x, int y) {
+	public boolean move(int x, int y, ChessSquare[][] chessBoard) {
 		if(((x>=8)||(x<0))||((y>=8)||(y<0))) {
 			return false;
 		}
