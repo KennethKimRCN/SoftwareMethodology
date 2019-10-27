@@ -115,4 +115,7 @@ public class Bishop extends ChessPiece{
 		return false;
 	}
 
+	public String getDisplay() {
+		return team+"B ";
+	}
 }
