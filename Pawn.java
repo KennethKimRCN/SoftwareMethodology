@@ -1,6 +1,6 @@
 //needs implement: en passant
 
-public class pawn extends ChessPiece{
+public class Pawn extends ChessPiece{
 	boolean hasMoved = false;
 	
 	public pawn(int x, int y,char t) {
