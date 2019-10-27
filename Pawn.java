@@ -1,13 +1,17 @@
+//needs implement: en passant
+
 public class Pawn extends ChessPiece{
 	boolean hasMoved = false;
 	
-	public pawn(int x, int y, char c) {
-		xpos = x;
-		ypos = y;
-		team = c;
+	public pawn(int x, int y,char t) {
+		super(x,y,t);
 	}
 	
 	public boolean move(int x, int y) {
+		
+		if(((x>=8)||(x<0))||((y>=8)||(y<0))) {
+			return false;
+		}
 		
 		if(!chessBoard[x][y].occupied()) {
 			//move 2 spaces in the beginning
@@ -60,6 +64,10 @@ public class Pawn extends ChessPiece{
 
 		
 		return false;
+	}
+	
+	public String getDisplay() {
+		return team+"p"+" ";
 	}
 	
 }
