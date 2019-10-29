@@ -1,13 +1,19 @@
 import java.util.Scanner;
 
 public class Turn {
-	public static boolean turn(ChessBoard chessBoard, boolean draw) {
+	public static boolean turn(ChessBoard chessBoard) {
 		Scanner s = new Scanner(System.in);
 		
 		String move;
 		boolean validmove = false;
 		
 		while(validmove==false) {
+			if(chessBoard.stalemate('w')) {
+				System.out.println("Stalemate");
+				System.out.println("Draw");
+				return true;
+			}
+			
 			move = s.nextLine();
 			
 			if(move.equals("resign")) {
@@ -15,14 +21,25 @@ public class Turn {
 				return true;
 			}
 			
-			else if(draw) {
+			else if(chessBoard.draw) {
 				if(move.equals("Draw")) {
 					System.out.println("Draw");
 					return true;
 				}
 			}
 			
+			//add in check here
+			
+			//create a copy of your piece you're trying to move, also copy the chessboard
+			
+			//if moving that copied piece on copied chessboard will result in the king not being in check
+			
+			//then move the real piece on the real chessboard
+			
+			//otherwise invalid move
+			
 			else {
+				chessBoard.falseDraw();
 				int x;
 				int y = -1;
 				switch (move.charAt(0)) {
@@ -68,7 +85,6 @@ public class Turn {
 					System.out.println("Invalid move, try again");
 				}
 				else if(chessBoard.board[x][y].getPiece().move(u,v,chessBoard.board)==false){
-					System.out.println(x+""+y+" "+u+v);
 					
 					System.out.println("Invalid move, try again");
 				}
@@ -76,26 +92,13 @@ public class Turn {
 					chessBoard.board[x][y].getPiece().move(u,v,chessBoard.board);
 					
 					if((chessBoard.board[x][y].getPiece() instanceof pawn)&&(x==0)) {
-						switch(move.charAt(5)) {
-						case 'N': chessBoard.board[u][v].unoccupy();
-						ChessPiece piece = new Knight(u,v,'w');
-						chessBoard.board[u][v].occupy(piece); break;
-						case 'R': chessBoard.board[u][v].unoccupy();
-							piece = new Rook(u,v,'w');
-							chessBoard.board[u][v].occupy(piece); break;
-						case 'B': chessBoard.board[u][v].unoccupy();
-						piece = new Bishop(u,v,'w');
-						chessBoard.board[u][v].occupy(piece); break;
-						default: chessBoard.board[u][v].unoccupy();
-						piece = new Queen(u,v,'w');
-						chessBoard.board[u][v].occupy(piece); break;
-						}
+						promote(u,v,move.charAt(5),chessBoard);
 					}
 					validmove=true;
 					//insert check and checkmate methods from King class
 					
 					if(move.substring(move.length()-5).equals("Draw?")) {
-						draw = true;
+						chessBoard.trueDraw();
 					}
 				}
 				
@@ -106,6 +109,13 @@ public class Turn {
 		validmove = false;
 		
 		while(validmove==false) {
+			
+			if(chessBoard.stalemate('b')) {
+				System.out.println("Stalemate");
+				System.out.println("Draw");
+				return true;
+			}
+			
 			move = s.nextLine();
 			
 			if(move.equals("resign")) {
@@ -113,14 +123,17 @@ public class Turn {
 				return true;
 			}
 			
-			else if(draw) {
+			else if(chessBoard.draw) {
 				if(move.equals("Draw")) {
 					System.out.println("Draw");
 					return true;
 				}
 			}
 			
+			//add in check here
+			
 			else {
+				chessBoard.falseDraw();
 				int x;
 				int y = -1;
 				switch (move.charAt(0)) {
@@ -171,7 +184,9 @@ public class Turn {
 				else {
 					chessBoard.board[x][y].getPiece().move(u,v,chessBoard.board);
 					if((chessBoard.board[u][v].getPiece() instanceof pawn)&&(x==7)) {
-						switch(move.charAt(5)) {
+						promote(u,v,move.charAt(5),chessBoard);
+						
+						/*switch(move.charAt(5)) {
 						case 'N': chessBoard.board[u][v].unoccupy();
 						ChessPiece piece = new Knight(u,v,'b');
 						chessBoard.board[u][v].occupy(piece); break;
@@ -184,14 +199,14 @@ public class Turn {
 						default: chessBoard.board[u][v].unoccupy();
 						piece = new Queen(u,v,'b');
 						chessBoard.board[u][v].occupy(piece); break;
-						}
+						}*/
 					}
 					
 					validmove=true;
 					//insert check and checkmate methods from King class
 					
-					if(move.substring(move.length()-6).equals("Draw?")) {
-						draw = true;
+					if(move.substring(move.length()-5).equals("Draw?")) {
+						chessBoard.trueDraw();
 					}
 					chessBoard.getDisplay();
 					return false;
@@ -199,8 +214,24 @@ public class Turn {
 				
 			}
 		}
-		s.close();
 		chessBoard.getDisplay();
 		return false;
+	}
+	
+	public static void promote(int u, int v, char c, ChessBoard chessBoard) {
+		switch(c) {
+		case 'N': chessBoard.board[u][v].unoccupy();
+		ChessPiece piece = new Knight(u,v,chessBoard.board[u][v].getPiece().getTeam());
+		chessBoard.board[u][v].occupy(piece); break;
+		case 'R': chessBoard.board[u][v].unoccupy();
+			piece = new Rook(u,v,chessBoard.board[u][v].getPiece().getTeam());
+			chessBoard.board[u][v].occupy(piece); break;
+		case 'B': chessBoard.board[u][v].unoccupy();
+		piece = new Bishop(u,v,chessBoard.board[u][v].getPiece().getTeam());
+		chessBoard.board[u][v].occupy(piece); break;
+		default: chessBoard.board[u][v].unoccupy();
+		piece = new Queen(u,v,chessBoard.board[u][v].getPiece().getTeam());
+		chessBoard.board[u][v].occupy(piece); break;
+		}
 	}
 }
