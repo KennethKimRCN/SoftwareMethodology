@@ -23,7 +23,6 @@ public class pawn extends ChessPiece{
 		}
 		
 		if(!chessBoard[x][y].occupied()) {
-			//move 2 spaces in the beginning
 			if((y==ypos)&&(x==xpos-2)) {
 				if(!hasMoved) {
 					chessBoard[xpos][ypos].unoccupy();
@@ -41,7 +40,6 @@ public class pawn extends ChessPiece{
 				}
 			}
 		
-			//move normally without capturing
 			if((y==ypos)&&(x==xpos-1)) {
 				chessBoard[xpos][ypos].unoccupy();
 				chessBoard[x][y].occupy(this);
@@ -52,12 +50,11 @@ public class pawn extends ChessPiece{
 			}
 		}
 		
-		//capture pieces
 		if(chessBoard[x][y].occupied()) {
 			if(this.team == chessBoard[x][y].getPiece().getTeam()) {
 				return false;
 			}
-			else if(((x==ypos-1)||(y==xpos-1))&&(y==xpos+1)) {
+			else if(((x==ypos-1)&&((y==xpos-1))||(y==xpos+1))) {
 				chessBoard[x][y].unoccupy();
 				xpos = x;
 				ypos = y;
@@ -84,7 +81,6 @@ public class pawn extends ChessPiece{
 		}
 		
 		if(!chessBoard[x][y].occupied()) {
-			//move 2 spaces in the beginning
 			if((y==ypos)&&(x==xpos+2)) {
 				if(!hasMoved) {
 					chessBoard[xpos][ypos].unoccupy();
@@ -102,7 +98,6 @@ public class pawn extends ChessPiece{
 				}
 			}
 		
-			//move normally without capturing
 			if((y==ypos)&&(x==xpos+1)) {
 				chessBoard[xpos][ypos].unoccupy();
 				chessBoard[x][y].occupy(this);
@@ -115,12 +110,11 @@ public class pawn extends ChessPiece{
 			}
 		}
 		
-		//capture pieces
 		if(chessBoard[x][y].occupied()) {
 			if(this.team == chessBoard[x][y].getPiece().getTeam()) {
 				return false;
 			}
-			else if(((x==xpos+1)||(y==xpos-1))&&(y==ypos+1)) {
+			else if(((x==xpos+1)&&((y==xpos-1))||(y==ypos+1))) {
 				chessBoard[x][y].unoccupy();
 				xpos = x;
 				ypos = y;
