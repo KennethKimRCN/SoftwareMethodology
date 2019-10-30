@@ -1,57 +1,30 @@
 package piece;
+
 import chess.*;
 
 /**
- * The Class Piece.
- * @author Khangynon Kim
+ * The basis for a standard chess piece
+ *
+ * @author Khangnyon Kim
  * @author Whitney Poh
  */
 public abstract class Piece {
-	
-	/** The p. */
-	int x, y, turn1, p;
-		
-	/**
-	 * Gets the x.
-	 *
-	 * @param x the x
-	 * @return the x
-	 */
-	public int getX(int x) {
-		return this.x;
-	}
-	
-	/**
-	 * Gets the y.
-	 *
-	 * @param y the y
-	 * @return the y
-	 */
-	public int getY(int y) {
-		return this.y;
-	}
-	
-	/**
-	 * Gets the p.
-	 *
-	 * @return the p
-	 */
-	public int getP() {
-		return this.p;
-	}
-	
-	/**
-	 * Checks if is opponent.
-	 *
-	 * @param x the x
-	 * @return the int
-	 */
-	public int isOpponent(Piece x) {
-		int p1 = this.p;
-		int p2 = x.p;
-		if (p1 == p2) {
-			return 0;
-		}
-		return 1;
-	}
+    // First move tracker
+    public boolean firstMove;
+    // Promotion tracker for pawn
+    public char promotion;
+    // En passant tracker for pawn
+    public boolean enpassant;
+    // Castling tracker for Rook and King
+    public char castling;
+
+    /**
+     * Check if move is legal
+     *
+     * @param start Current location of piece
+     * @param end Destination of the piece
+     * @param board
+     * @return True if move is legal, false otherwise
+     */
+    public abstract boolean legalMove(Coord start, Coord end, Board board);
 }
