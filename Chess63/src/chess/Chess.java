@@ -183,14 +183,14 @@ public class Chess {
         /**
          * "Spell checking" for regular input
          */
-        if(s.charAt(0) > 'g' || s.charAt(0) < 'a')
+        if(s.charAt(0) > 'h' || s.charAt(0) < 'a')
         	return false;
         if(s.charAt(1) > '8' || s.charAt(1) < '1')
         	return false;
         
         if(s.charAt(2) != ' ')
         	return false;
-        if(s.charAt(3) > 'g' || s.charAt(3) < 'a')
+        if(s.charAt(3) > 'h' || s.charAt(3) < 'a')
         	return false;
         if(s.charAt(4) > '8' || s.charAt(4) < '1')
         	return false;
