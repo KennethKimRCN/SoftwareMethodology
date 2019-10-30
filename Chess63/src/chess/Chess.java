@@ -183,27 +183,16 @@ public class Chess {
         /**
          * "Spell checking" for regular input
          */
-        if(!(s.charAt(0) != 'a' || s.charAt(0) != 'b' ||
-        		s.charAt(0) != 'c' || s.charAt(0) != 'd' ||
-        		s.charAt(0) != 'e' || s.charAt(0) != 'f' ||
-        		s.charAt(0) != 'g' || s.charAt(0) != 'g'))
+        if(s.charAt(0) > 'g' || s.charAt(0) < 'a')
         	return false;
-        if(!(s.charAt(1) != '1' || s.charAt(1) != '2' ||
-        		s.charAt(1) != '3' || s.charAt(1) != '4' ||
-        		s.charAt(1) != '5' || s.charAt(1) != '6' ||
-        		s.charAt(1) != '7' || s.charAt(1) != '8'))
+        if(s.charAt(1) > '8' || s.charAt(1) < '1')
         	return false;
+        
         if(s.charAt(2) != ' ')
         	return false;
-        if(!(s.charAt(3) != 'a' || s.charAt(3) != 'b' ||
-        		s.charAt(3) != 'c' || s.charAt(3) != 'd' ||
-        		s.charAt(3) != 'e' || s.charAt(3) != 'f' ||
-        		s.charAt(3) != 'g' || s.charAt(3) != 'g'))
+        if(s.charAt(3) > 'g' || s.charAt(3) < 'a')
         	return false;
-        if(!(s.charAt(4) != '1' || s.charAt(4) != '2' ||
-        		s.charAt(4) != '3' || s.charAt(4) != '4' ||
-        		s.charAt(4) != '5' || s.charAt(4) != '6' ||
-        		s.charAt(4) != '7' || s.charAt(4) != '8'))
+        if(s.charAt(4) > '8' || s.charAt(4) < '1')
         	return false;
         
         Coord start = getPosition(s.substring(0,2));
