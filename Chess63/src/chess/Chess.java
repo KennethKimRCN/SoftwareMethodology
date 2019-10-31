@@ -22,6 +22,7 @@ public class Chess {
         boolean gameover = false;
         boolean lastMoveLegal = true;
         boolean drawOffered = false;
+        boolean stalemate = false;
 
         while(!gameover) {
         	backup = board; //Backup board allows to easily undo illegal moves
@@ -58,6 +59,11 @@ public class Chess {
             	player = !player; // This allows opponent to win
             	break;
             }
+            
+            //Stalemate
+            if(stalemate) {
+            	break;
+            }
 
             //Checks if the move is legal
             if(movePiece(input, player)) {
@@ -79,6 +85,10 @@ public class Chess {
                     drawOffered = false;
                 
                 if(player == false && whiteCheck() == true) { //Currently white's turn, check if black pieces can check white King
+                	if(stalemate(player)) { //Check if stalemate applies
+                		drawOffered = true;
+                		break;
+                	}
                 	lastMoveLegal = false; //Cannot put yourself into check
                     undo(input, player);
                 	//backup.printBoard();
@@ -503,6 +513,72 @@ public class Chess {
                     ((Pawn) board.tile[i][j].piece).doubleJump = false;
             }
         }
+    }
+    
+    /**
+     * Rule for stalemate:
+     * 1. No pieces are able to move except for King piece
+     * 2. King piece is in a position where if it moves then it is in check
+     * 
+     * @return true if stalemate applies, false otherwise
+     */
+    private static boolean stalemate(boolean player) {
+        Coord wK_pos = null, bK_pos = null, test;
+        if (!player) {
+        	for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    Tile s = board.tile[i][j];
+                    if(s == null) {
+                        //Skip null spot
+                    }
+                    else if((s.piece instanceof King) && s.player == true)
+                        wK_pos = new Coord(j , i);
+                                   
+                }
+               
+            }
+
+            for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    Tile s = board.tile[i][j];
+                    if(s == null) {
+                        //Skip null spot
+                    }  else if(s.player == false) {
+                        test = new Coord(j , i);
+                        if(s.piece.legalMove(test, wK_pos, board)) 
+                            return true; //White in check
+                    }
+                }
+            }
+        }
+        else if(player) {
+	        for(int i = 0; i < 8; i++) {
+	            for(int j = 0; j < 8; j++) {
+	                Tile s = board.tile[i][j];
+	                if(s == null) {
+	                    //Skip null spot
+	                }
+	                else if((s.piece instanceof King) && s.player == false)
+	                    bK_pos = new Coord(j , i);
+	                               
+	            }
+	           
+	        }
+	
+	        for(int i = 0; i < 8; i++) {
+	            for(int j = 0; j < 8; j++) {
+	                Tile s = board.tile[i][j];
+	                if(s == null) {
+	                    //Skip null spot
+	                }  else if(s.player == true) {
+	                    test = new Coord(j , i);
+	                    if(s.piece.legalMove(test, bK_pos, board)) 
+	                        return true; //Black in check
+	                }
+	            }
+	        }
+        }
+    	return false;
     }
 }
 

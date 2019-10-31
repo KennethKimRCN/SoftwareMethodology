@@ -55,7 +55,7 @@ public class Pawn extends Piece{
                 //Check for promotion
                 if(startSquare.player == true && end.getY() == 0 ||
                    startSquare.player == false && end.getY() == 7)
-                    board.tile[start.getY()][start.getX()] = new Tile(parsePromotion(), startSquare.player);
+                    board.tile[start.getY()][start.getX()] = new Tile(promotion(), startSquare.player);
 
                 enpassant = false;
                 return true;
@@ -86,7 +86,7 @@ public class Pawn extends Piece{
                 //Check for promotion
                 if(startSquare.player == true && end.getY() == 0 ||
                    startSquare.player == false && end.getY() == 7)
-                    board.tile[start.getY()][start.getX()] = new Tile(parsePromotion(), startSquare.player);
+                    board.tile[start.getY()][start.getX()] = new Tile(promotion(), startSquare.player);
 
                 enpassant = false;
                 return true;
@@ -112,11 +112,11 @@ public class Pawn extends Piece{
 
 
     /**
-     * Checks the promotion field and returns the appropriate piece
+     * Method that promotes pawn piece to [Rook / Knight / Bishop/ Queen]
      *
-     * @return The piece to promote the Pawn to (Rook, Knight, Bishop, or Queen)
+     * @return Promoted piece
      */
-    public Piece parsePromotion() {
+    public Piece promotion() {
 
         switch(promotion) {
             case 'R': return new Rook();

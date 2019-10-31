@@ -50,7 +50,7 @@ public class Board {
             tile[6][i] = new Tile(new Pawn(), true);
         }
         
-        //Custom map to test
+        //Custom map to test illegal inputs
         /*
 	        bK ##    ##    ##    ## 8
 	        bR    ##    ##    ##    7
@@ -68,7 +68,13 @@ public class Board {
         tile[4][0] = new Tile(new Knight(), true);
         tile[5][0] = new Tile(new King(), true);
 		*/
-
+        
+        //Custom map2 to test stalemate.
+        /*
+        tile[0][6] = new Tile(new King(), false);
+        tile[5][6] = new Tile(new Queen(), false);
+        tile[7][7] = new Tile(new King(), true);
+        */
     }
 
     /**
