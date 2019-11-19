@@ -1,5 +1,8 @@
 package controller;
-
+/**
+ * @author Khangnyon Kim
+ * @author Whiteny Poh
+ */
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -194,8 +197,8 @@ public class AlbumUIControl {
 		Album newAlbum = new Album();
 
 		
-		//CreateAlbumController Controller = loader.getController();
-		//Controller.start(newStage, this.currUI, newAlbum);
+		CreateAlbum Controller = loader.getController();
+		Controller.start(newStage, this.currUI, newAlbum);
 
 		Scene scene = new Scene(root, 322, 191);
 		newStage.setResizable(false);

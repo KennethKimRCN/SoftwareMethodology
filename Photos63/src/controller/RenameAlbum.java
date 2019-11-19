@@ -1,5 +1,8 @@
 package controller;
-
+/**
+ * @author Khangnyon Kim
+ * @author Whiteny Poh
+ */
 import java.io.IOException;
 
 import javafx.event.ActionEvent;

@@ -5,7 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public abstract class User implements Serializable{
 	String username;
-	boolean isAdmin;
+	public boolean isAdmin;
 	
 	public String getUsername() {
 		return this.username;
