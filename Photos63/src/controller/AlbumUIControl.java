@@ -276,8 +276,8 @@ public class AlbumUIControl {
 		newStage.initOwner(this.primaryStage);
 
 		String oldName = this.activeAlbum.getName();
-		//RenameAlbumController Controller = loader.getController();
-		//Controller.start(newStage, this.currUI, this.activeAlbum);
+		RenameAlbum Controller = loader.getController();
+		Controller.start(newStage, this.currUI, this.activeAlbum);
 
 		Scene scene = new Scene(root, 322, 191);
 		newStage.setResizable(false);

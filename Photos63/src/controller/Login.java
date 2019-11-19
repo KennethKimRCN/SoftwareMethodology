@@ -5,18 +5,13 @@ package controller;
  */
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -94,14 +89,14 @@ public class Login {
 		Stage newStage = new Stage();
 		
 		AdminControl Controller = loader.getController();
-		//Controller.start(newStage, this.primaryStage, this.usersObject);
+		Controller.start(newStage, this.primaryStage, this.usersObject);
 		
 		Scene scene = new Scene(root);
 		newStage.setScene(scene);
 		newStage.showAndWait();
 	}
 	
-	private void loadUserWindow(User currUser) throws IOException{
+	private void loadUser(User currUser) throws IOException{
 		this.username.clear();
 		this.primaryStage.hide();
 
@@ -111,9 +106,9 @@ public class Login {
 
 		Stage newStage = new Stage();
 
-		//PlayerController Controller = loader.getController();
+		AlbumUIControl Controller = loader.getController();
 		AlbumUI currPlayer = (AlbumUI) currUser;
-		//Controller.start(newStage, this.primaryStage, currPlayer);
+		Controller.start(newStage, this.primaryStage, currPlayer);
 
 		Scene scene = new Scene(root);
 		newStage.setScene(scene);

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,6 +37,24 @@ public class AdminControl {
 	
 	private UserList usersObject;
 	private ArrayList<User> userList;
+	
+	public void start(Stage primaryStage, Stage previousStage, UserList usersObject) throws IOException { 
+		this.primaryStage = primaryStage;
+		this.previousStage = previousStage;
+
+		this.usersObject = usersObject;
+		this.userList = this.usersObject.getUsers();
+
+		this.obsList = FXCollections.observableArrayList();
+		for(int i = 0; i < this.userList.size(); i++){
+			this.obsList.add(this.userList.get(i));
+		}
+		this.listView.setItems(this.obsList.sorted());
+
+		//default select first user in the list when start the program
+		this.listView.getSelectionModel().selectFirst();
+
+	}
 	
 	/**
 	 * Logout function
