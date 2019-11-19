@@ -25,8 +25,8 @@ public class UserList implements Serializable{
 		return users;
 	}
 	
-	public static final String storeDir = "data";
-	public static final String storeFile = "users.data";
+	public static final String storeDir = "dat";
+	public static final String storeFile = "users.dat";
 	
 	public static void writeUserList(UserList list) throws IOException{
 		FileOutputStream fileOut = new FileOutputStream(storeDir + File.separator + storeFile);

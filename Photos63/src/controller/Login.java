@@ -83,7 +83,7 @@ public class Login {
 		this.primaryStage.hide();
 		
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/view/admin.fxml"));
+		loader.setLocation(getClass().getResource("/view/Admin.fxml"));
 		AnchorPane root = (AnchorPane)loader.load();
 		
 		Stage newStage = new Stage();
@@ -101,7 +101,7 @@ public class Login {
 		this.primaryStage.hide();
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/view/Player.fxml"));	
+		loader.setLocation(getClass().getResource("/view/AlbumUI.fxml"));	
 		AnchorPane root = (AnchorPane)loader.load();
 
 		Stage newStage = new Stage();

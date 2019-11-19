@@ -50,10 +50,7 @@ public class AdminControl {
 			this.obsList.add(this.userList.get(i));
 		}
 		this.listView.setItems(this.obsList.sorted());
-
-		//default select first user in the list when start the program
 		this.listView.getSelectionModel().selectFirst();
-
 	}
 	
 	/**

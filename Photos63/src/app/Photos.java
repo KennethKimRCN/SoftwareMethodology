@@ -15,9 +15,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 import model.Admin;
 import model.User;
-//import controller.Login;
 import model.UserList;
 
 public class Photos extends Application {
@@ -27,7 +27,6 @@ public class Photos extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		//on program execution, try to load serialized Users
 		this.usersObject = this.getUsersContainer();
 
 		FXMLLoader loader = new FXMLLoader();
@@ -39,20 +38,12 @@ public class Photos extends Application {
 		Controller.start(primaryStage, this.usersObject);
 
 		Scene scene = new Scene(root, 360, 280);
-		primaryStage.setTitle("Photos63 by Khangynon Kim and Whitney Poh");
+		primaryStage.setTitle("Photos63 by Khangnyon Kim and Whitney Poh");
 		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	/**
-	 * Main driver
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		launch(args);
-	}
-	
 	@Override
 	public void stop() {
 		try {
@@ -62,6 +53,18 @@ public class Photos extends Application {
 		}
 	}
 	
+	/**
+	 * Main driver
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
+	/**
+	 * This function stores data
+	 * 
+	 */
 	private UserList getUsersContainer() {
 		UserList usersContainer = null;
 		try {
@@ -80,5 +83,7 @@ public class Photos extends Application {
 		}
 		return usersContainer;
 	}
+	
+	
 
 }
