@@ -44,28 +44,54 @@ import model.User;
 import model.UserList;
 
 /**
+ * The Class Controller_PhotoList.
+ *
  * @author Khangnyon Kim
  * @author Whiteny Poh
  */
 public class Controller_PhotoList implements Controller_Logout{
+	
+	/** The photo list view. */
 	@FXML
 	ListView<Photo> photoListView;
 	
+	/** The album image view. */
 	@FXML
 	ImageView albumImageView;
 	
+	/** The num photos text. */
 	@FXML
 	Text albumDateRangeText, oldestPhotoText, numPhotosText;
 	
+	/** The album name text. */
 	@FXML
 	Label albumNameText;
 	
+	/** The photo pane thumbnail. */
+	@FXML
+	private StackPane photoPaneThumbnail;
+	
+	/** The obs list. */
 	private ObservableList<Photo> obsList;
+	
+	/** The photos. */
 	private List<Photo> photos;
+	
+	/** The album. */
 	private Album album;
+	
+	/** The user. */
 	private User user;
+	
+	/** The ulist. */
 	private UserList ulist;
 	
+	
+	/**
+	 * Start.
+	 *
+	 * @param mainStage the main stage
+	 */
 	public void start(Stage mainStage) {
 		albumNameText.setText(album.getName());
 		updateAlbumDetails();
@@ -80,6 +106,11 @@ public class Controller_PhotoList implements Controller_Logout{
 		photoListView.setItems(obsList);
 	}
 	
+	/**
+	 * Delete album.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void deleteAlbum(ActionEvent event) {
       	  Alert alert = 
@@ -106,6 +137,12 @@ public class Controller_PhotoList implements Controller_Logout{
  		  }
 	}
 	
+	/**
+	 * Back to albums.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML
 	protected void backToAlbums(ActionEvent event) throws ClassNotFoundException {
 		Parent parent;
@@ -132,6 +169,12 @@ public class Controller_PhotoList implements Controller_Logout{
 		}   
 	}
 	
+	/**
+	 * Choose photo.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	protected void choosePhoto(ActionEvent event) throws IOException {
 		FileChooser fileChooser = new FileChooser();
@@ -194,31 +237,63 @@ public class Controller_PhotoList implements Controller_Logout{
 		updateAlbumDetails();
 	}
 	
+	/**
+	 * Update album details.
+	 */
 	public void updateAlbumDetails() {
+		albumImageView.setImage(null);
 		albumImageView.setImage(album.getAlbumPhoto());
 		albumDateRangeText.setText(album.getDateRange());
 		oldestPhotoText.setText("Oldest Photo: " + album.getOldestPhotoDate());
 		numPhotosText.setText("Number of Photos: " + album.getCount());
 	}
 	
+	/**
+	 * Handle logout button.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML 
 	protected void handleLogoutButton(ActionEvent event) throws ClassNotFoundException {
     	logout(event);      
 	}
 	
+	/**
+	 * The Class PhotoCell.
+	 */
 	private class PhotoCell extends ListCell<Photo> {
 			
+		/** The apane. */
 		AnchorPane apane = new AnchorPane();
+		
+		/** The spane. */
 		StackPane spane = new StackPane();
 		
+		/** The image view. */
 		ImageView imageView = new ImageView();
+		
+		/** The caption label. */
 		Label captionLabel = new Label();
+		
+		/** The delete photo btn. */
 		Button deletePhotoBtn = new Button("Delete");
+		
+		/** The edit photo btn. */
 		Button editPhotoBtn = new Button("Caption");
+		
+		/** The move photo btn. */
 		Button movePhotoBtn = new Button("Move");
+		
+		/** The copy photo btn. */
 		Button copyPhotoBtn = new Button("Copy");
+		
+		/** The view photo btn. */
 		Button viewPhotoBtn = new Button("View");
 			
+		/**
+		 * Instantiates a new photo cell.
+		 */
 		public PhotoCell() {
 			super();
 		
@@ -241,16 +316,16 @@ public class Controller_PhotoList implements Controller_Logout{
 			AnchorPane.setRightAnchor(deletePhotoBtn, 0.0);
 			AnchorPane.setBottomAnchor(deletePhotoBtn, 0.0);
 			
-			AnchorPane.setLeftAnchor(editPhotoBtn, 55.0);
+			AnchorPane.setRightAnchor(editPhotoBtn, 55.0);
 			AnchorPane.setBottomAnchor(editPhotoBtn, 0.0);
 			
-			AnchorPane.setRightAnchor(movePhotoBtn, 70.0);
+			AnchorPane.setRightAnchor(movePhotoBtn, 120.0);
 			AnchorPane.setBottomAnchor(movePhotoBtn, 0.0);
 			
-			AnchorPane.setLeftAnchor(viewPhotoBtn, 115.0);
-			AnchorPane.setBottomAnchor(viewPhotoBtn, 0.0);
+			AnchorPane.setRightAnchor(viewPhotoBtn, 0.0);
+			AnchorPane.setTopAnchor(viewPhotoBtn, 0.0);
 			
-			AnchorPane.setRightAnchor(copyPhotoBtn, 120.0);
+			AnchorPane.setRightAnchor(copyPhotoBtn, 180.0);
 			AnchorPane.setBottomAnchor(copyPhotoBtn, 0.0);
 			
 			deletePhotoBtn.setVisible(false);
@@ -269,6 +344,12 @@ public class Controller_PhotoList implements Controller_Logout{
 			setGraphic(apane);
 		}
 			
+		/**
+		 * Update item.
+		 *
+		 * @param photo the photo
+		 * @param empty the empty
+		 */
 		@Override
 		public void updateItem(Photo photo, boolean empty) {
 			super.updateItem(photo, empty);
@@ -328,12 +409,17 @@ public class Controller_PhotoList implements Controller_Logout{
 			}	
 		}
 		
+		/**
+		 * Delete photo.
+		 *
+		 * @param event the event
+		 * @param photo the photo
+		 */
 		public void deletePhoto(ActionEvent event, Photo photo) {
 			Alert alert = 
 	 				   new Alert(AlertType.INFORMATION);
 	 		   alert.setTitle("Delete photo");
-	 		   alert.setHeaderText(
-	 				   "There's no going back!");
+	 		   alert.setHeaderText("There's no going back!");
 
 	 		   String content = "Are you sure you want to delete this photo?";
 
@@ -358,6 +444,12 @@ public class Controller_PhotoList implements Controller_Logout{
 	 		  }
 		}
 		
+		/**
+		 * Edits the photo.
+		 *
+		 * @param e the e
+		 * @param photo the photo
+		 */
 		public void editPhoto(ActionEvent e, Photo photo) {
 			
 			Dialog<Album> dialog = new Dialog<>();
@@ -395,6 +487,12 @@ public class Controller_PhotoList implements Controller_Logout{
 				   }
 		}
 		
+		/**
+		 * Move photo.
+		 *
+		 * @param e the e
+		 * @param photo the photo
+		 */
 		public void movePhoto(ActionEvent e, Photo photo) {
 			
 			Dialog<Album> dialog = new Dialog<>();
@@ -451,6 +549,12 @@ public class Controller_PhotoList implements Controller_Logout{
 			}
 		}
 		
+		/**
+		 * Copy photo.
+		 *
+		 * @param e the e
+		 * @param photo the photo
+		 */
 		public void copyPhoto(ActionEvent e, Photo photo) {
 			
 			Dialog<Album> dialog = new Dialog<>();
@@ -504,6 +608,14 @@ public class Controller_PhotoList implements Controller_Logout{
 			}
 		}
 		
+		/**
+		 * View photo.
+		 *
+		 * @param e the e
+		 * @param photo the photo
+		 * @throws IOException Signals that an I/O exception has occurred.
+		 * @throws ClassNotFoundException the class not found exception
+		 */
 		public void viewPhoto(ActionEvent e, Photo photo) throws IOException, ClassNotFoundException {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ViewPhoto.fxml"));
 	        Parent parent = (Parent) loader.load();
@@ -524,14 +636,29 @@ public class Controller_PhotoList implements Controller_Logout{
 		}
 	}
 	
+	/**
+	 * Sets the album.
+	 *
+	 * @param a the new album
+	 */
 	public void setAlbum(Album a) {
 		album = a;
 	}
 	
+	/**
+	 * Sets the user.
+	 *
+	 * @param u the new user
+	 */
 	public void setUser(User u) {
 		user = u;
 	}
 	
+	/**
+	 * Sets the ulist.
+	 *
+	 * @param ulist the new ulist
+	 */
 	public void setUlist(UserList ulist) {
 		this.ulist = ulist;
 	}

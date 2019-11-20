@@ -10,16 +10,27 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
+/**
+ * The Class SerializableImage.
+ */
 @SuppressWarnings("serial")
 public class SerializableImage implements Serializable{
 
+	/** The height. */
 	private int width, height;
+	
+	/** The pixels. */
 	private int[][] pixels;
 	
+	/**
+	 * Instantiates a new serializable image.
+	 */
 	public SerializableImage() {}
 	
-	/*
-	 * Converts Image to 2d array
+	/**
+	 * Converts Image to 2d array.
+	 *
+	 * @param image the new image
 	 */
 	public void setImage(Image image) {
 		width = ((int) image.getWidth());
@@ -33,7 +44,9 @@ public class SerializableImage implements Serializable{
 	}
 	
 	/**
-	 * Converts 2d array to Image
+	 * Converts 2d array to Image.
+	 *
+	 * @return the image
 	 */
 	public Image getImage() {
 		WritableImage image = new WritableImage(width, height);
@@ -46,21 +59,37 @@ public class SerializableImage implements Serializable{
 		return image;
 	}
 	
+	/**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * Gets the pixels.
+	 *
+	 * @return the pixels
+	 */
 	public int[][] getPixels() {
 		return pixels;
 	}
 	
 	/**
-	 * This is a function that compares if 2 images are equal
-	 * @param si	The serializable image to be checked
+	 * This is a function that compares if 2 images are equal.
+	 *
+	 * @param si The serializable image to be checked
 	 * @return true when equal
 	 */
 	public boolean equals(SerializableImage si) {

@@ -34,44 +34,84 @@ import model.Photo;
 import model.Tag;
 import model.User;
 import model.UserList;
+
 /**
+ * The Class Controller_DisplayPhoto.
+ *
  * @author Khangnyon Kim
  * @author Whiteny Poh
  */
 public class Controller_DisplayPhoto implements Controller_Logout{
+	
+	/** The Constant CAME_FROM_PHOTO_SEARCH. */
 	public final static int CAME_FROM_ALBUM_CONTENT = 0,
 			CAME_FROM_PHOTO_SEARCH = 1;
 	
+	/** The tag list view. */
 	@FXML
 	ListView<Tag> tagListView;
 	
+	/** The photo image view. */
 	@FXML
 	ImageView photoImageView;
 	
+	/** The photo date text. */
 	@FXML
 	Text captionText, photoDateText;
 	
+	/** The next photo btn. */
 	@FXML
 	Button previousPhotoBtn, nextPhotoBtn;
 	
+	/** The obs list. */
 	private ObservableList<Tag> obsList;
+	
+	/** The photo index. */
 	private int photoIndex;
+	
+	/** The album. */
 	private Album album;
+	
+	/** The user. */
 	private User user;
+	
+	/** The photos. */
 	private List<Photo> photos;
+	
+	/** The user list. */
 	private UserList ulist;
+	
+	/** The key. */
 	private int key;
 	
+	/**
+	 * Start.
+	 *
+	 * @param mainStage the main stage
+	 */
 	public void start(Stage mainStage) {
 		if (key == CAME_FROM_ALBUM_CONTENT)
 			photos = album.getPhotos();
 		updatePhotoDetails();
 	}
 	
+	/**
+	 * Handle logout button.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML 
 	protected void handleLogoutButton(ActionEvent event) throws ClassNotFoundException {
     	logout(event);          
 	}
+	
+	/**
+	 * Back.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML
 	protected void back(ActionEvent event) throws ClassNotFoundException {
 		Parent parent;
@@ -116,6 +156,11 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 		} 
 	}
 	
+	/**
+	 * Adds the tag.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void addTag(ActionEvent event) {
 		
@@ -169,6 +214,13 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 				 
 		}		   
 
+	/**
+	 * Check fields.
+	 *
+	 * @param type the type
+	 * @param value the value
+	 * @return the string
+	 */
 	private String checkFields(String type, String value) {
 		for(Tag t : photos.get(photoIndex).getTags())
 		{
@@ -181,18 +233,31 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 		return null;
 	}
 	
+	/**
+	 * Previous photo.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void previousPhoto(ActionEvent event) {
 		photoIndex--;
 		updatePhotoDetails();
 	}
 	
+	/**
+	 * Next photo.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void nextPhoto(ActionEvent event) {
 		photoIndex++;
 		updatePhotoDetails();
 	}
 	
+	/**
+	 * Update photo details.
+	 */
 	public void updatePhotoDetails() {
 		photoImageView.setImage(photos.get(photoIndex).getImage());
 		captionText.setText("Caption: " + photos.get(photoIndex).getCaption());
@@ -214,38 +279,80 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 		nextPhotoBtn.setDisable(photoIndex == photos.size()-1);
 	}
 	
+	/**
+	 * Sets the album.
+	 *
+	 * @param a the new album
+	 */
 	public void setAlbum(Album a) {
 		album = a;
 	}
 	
+	/**
+	 * Sets the user.
+	 *
+	 * @param u the new user
+	 */
 	public void setUser(User u) {
 		user = u;
 	}
 	
+	/**
+	 * Sets the photo index.
+	 *
+	 * @param i the new photo index
+	 */
 	public void setPhotoIndex(int i) {
 		photoIndex = i;
 	}
 	
+	/**
+	 * Sets the ulist.
+	 *
+	 * @param ulist the new ulist
+	 */
 	public void setUlist(UserList ulist) {
 		this.ulist = ulist;
 	}
 
+	/**
+	 * Sets the photos.
+	 *
+	 * @param photos the new photos
+	 */
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
 	}
 	
+	/**
+	 * Sets the key.
+	 *
+	 * @param key the new key
+	 */
 	public void setKey(int key) {
 		this.key = key;
 	}
 	
+	/**
+	 * The Class TagCell.
+	 */
 	private class TagCell extends ListCell<Tag> {
 			
+		/** The apane. */
 		AnchorPane apane = new AnchorPane();
 		
+		/** The tag label. */
 		Label tagLabel = new Label();
+		
+		/** The delete tag btn. */
 		Button deleteTagBtn = new Button("Delete");
+		
+		/** The edit tag btn. */
 		Button editTagBtn = new Button("Edit");
 			
+		/**
+		 * Instantiates a new tag cell.
+		 */
 		public TagCell() {
 			super();
 			
@@ -255,7 +362,7 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 			AnchorPane.setRightAnchor(deleteTagBtn, 0.0);
 			AnchorPane.setTopAnchor(deleteTagBtn, 0.0);
 			
-			AnchorPane.setRightAnchor(editTagBtn, 80.0);
+			AnchorPane.setRightAnchor(editTagBtn, 50.0);
 			AnchorPane.setTopAnchor(editTagBtn, 0.0);
 			
 			tagLabel.setMaxWidth(200.0);
@@ -268,6 +375,12 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 			setGraphic(apane);
 		}
 			
+		/**
+		 * Update item.
+		 *
+		 * @param tag the tag
+		 * @param empty the empty
+		 */
 		@Override
 		public void updateItem(Tag tag, boolean empty) {
 			super.updateItem(tag, empty);
@@ -294,6 +407,12 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 		}
 	}
 		
+		/**
+		 * Delete tag.
+		 *
+		 * @param e the e
+		 * @param tag the tag
+		 */
 		public void deleteTag(ActionEvent e, Tag tag) {
 			Alert alert = 
 	 				   new Alert(AlertType.INFORMATION);
@@ -326,6 +445,12 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 	 		  }
 		}
 		
+		/**
+		 * Edits the tag.
+		 *
+		 * @param e the e
+		 * @param tag the tag
+		 */
 		public void editTag(ActionEvent e, Tag tag) {
 			 Dialog<User> dialog = new Dialog<>();
 			   dialog.setTitle("Edit Tag");

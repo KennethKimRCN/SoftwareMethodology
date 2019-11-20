@@ -30,7 +30,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -46,40 +45,66 @@ import model.Photo;
 import model.Tag;
 import model.User;
 import model.UserList;
+
 /**
+ * The Class Controller_SearchPhoto.
+ *
  * @author Khangnyon Kim
  * @author Whiteny Poh
  */
 public class Controller_SearchPhoto implements Controller_Logout{
 
+	/** The create album btn. */
 	@FXML
 	Button createAlbumBtn;
 	
+	/** The tag type text field. */
 	@FXML
 	TextField tagValueTextField, tagTypeTextField;
 	
+	/** The to date. */
 	@FXML
 	DatePicker fromDate, toDate;
 	
+	/** The tag table. */
 	@FXML
 	TableView<Tag> tagTable;
 	
+	/** The tag value column. */
 	@FXML
 	TableColumn<Tag,String> tagTypeColumn, tagValueColumn;
 	
+	/** The tag delete column. */
 	@FXML
 	TableColumn<Tag,Tag> tagDeleteColumn;
 	
+	/** The photo list view. */
 	@FXML
 	ListView<Photo> photoListView;
 	
+	/** The photo obs list. */
 	private ObservableList<Photo> photoObsList;
+	
+	/** The tag obs list. */
 	private ObservableList<Tag> tagObsList;
+	
+	/** The user. */
 	private User user;
+	
+	/** The photos. */
 	private List<Photo> photos;
+	
+	/** The tags. */
 	private List<Tag> tags;
+	
+	/** The ulist. */
 	private UserList ulist;
 	
+	/**
+	 * Start.
+	 *
+	 * @param mainStage the main stage
+	 */
 	public void start(Stage mainStage) {
 		tags = new ArrayList<Tag>();
 		tagObsList = FXCollections.observableArrayList(tags);
@@ -136,6 +161,9 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		
 	}
 	
+	/**
+	 * Adds the tag.
+	 */
 	@FXML
 	protected void addTag() {
 		String tagType = tagTypeTextField.getText().trim();
@@ -185,6 +213,11 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		tags.add(tempTag);
 	}
 	
+	/**
+	 * Gets the all photos.
+	 *
+	 * @return the all photos
+	 */
 	public List<Photo> getAllPhotos() {
 		List<Photo> photos = new ArrayList<Photo>();
 		
@@ -198,6 +231,12 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		return photos;
 	}
 	
+	/**
+	 * Creates the album from results.
+	 *
+	 * @param e the e
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	protected void createAlbumFromResults(ActionEvent e) throws IOException {
 		Dialog<Album> dialog = new Dialog<>();
@@ -261,6 +300,12 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		}
 	}
 	
+	/**
+	 * Check fields.
+	 *
+	 * @param albumName the album name
+	 * @return the string
+	 */
 	private String checkFields(String albumName) {
 		if (albumName.trim().isEmpty())
 			return "Album Name is a required field.";
@@ -270,6 +315,11 @@ public class Controller_SearchPhoto implements Controller_Logout{
 			return null;
 	}
 	
+	/**
+	 * Search photos.
+	 *
+	 * @param e the e
+	 */
 	@FXML
 	protected void searchPhotos(ActionEvent e) {
 		List<Photo> allPhotos = getAllPhotos();
@@ -317,11 +367,23 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		
 	}
 	
+	/**
+	 * Handle logout button.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML 
 	protected void handleLogoutButton(ActionEvent event) throws ClassNotFoundException {
     	logout(event);        
 	}
 	
+	/**
+	 * Back to albums.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML
 	protected void backToAlbums(ActionEvent event) throws ClassNotFoundException {
 		Parent parent;
@@ -347,24 +409,47 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		}   
 	}
 	
+	/**
+	 * Sets the user.
+	 *
+	 * @param u the new user
+	 */
 	public void setUser(User u) {
 		user = u;
 	}
 	
+	/**
+	 * Sets the ulist.
+	 *
+	 * @param ulist the new ulist
+	 */
 	public void setUlist(UserList ulist) {
 		this.ulist = ulist;
 	}
 	
+	/**
+	 * The Class SearchPhotoCell.
+	 */
 	private class SearchPhotoCell extends ListCell<Photo> {
 			
+		/** The apane. */
 		AnchorPane apane = new AnchorPane();
+		
+		/** The spane. */
 		StackPane spane = new StackPane();
 		
+		/** The image view. */
 		ImageView imageView = new ImageView();
+		
+		/** The caption label. */
 		Label captionLabel = new Label();
-		Button deletePhotoBtn = new Button("Delete");
+		
+		/** The view photo btn. */
 		Button viewPhotoBtn = new Button("View");
 			
+		/**
+		 * Instantiates a new search photo cell.
+		 */
 		public SearchPhotoCell() {
 			super();
 		
@@ -384,15 +469,11 @@ public class Controller_SearchPhoto implements Controller_Logout{
 			AnchorPane.setLeftAnchor(captionLabel, 55.0);
 			AnchorPane.setTopAnchor(captionLabel, 0.0);
 			
-			AnchorPane.setRightAnchor(deletePhotoBtn, 0.0);
-			AnchorPane.setBottomAnchor(deletePhotoBtn, 0.0);
-			
-			AnchorPane.setLeftAnchor(viewPhotoBtn, 115.0);
+			AnchorPane.setLeftAnchor(viewPhotoBtn, 50.0);
 			AnchorPane.setBottomAnchor(viewPhotoBtn, 0.0);
 			
-			deletePhotoBtn.setVisible(false);
 			viewPhotoBtn.setVisible(false);
-			apane.getChildren().addAll(spane, captionLabel, deletePhotoBtn, viewPhotoBtn);
+			apane.getChildren().addAll(spane, captionLabel, viewPhotoBtn);
 			
 			apane.setPrefHeight(55.0);
 			
@@ -401,6 +482,12 @@ public class Controller_SearchPhoto implements Controller_Logout{
 			setGraphic(apane);
 		}
 			
+		/**
+		 * Update item.
+		 *
+		 * @param photo the photo
+		 * @param empty the empty
+		 */
 		@Override
 		public void updateItem(Photo photo, boolean empty) {
 			super.updateItem(photo, empty);
@@ -409,20 +496,13 @@ public class Controller_SearchPhoto implements Controller_Logout{
 			{
 				imageView.setImage(null);
 				captionLabel.setText("");
-				deletePhotoBtn.setVisible(false);
 				viewPhotoBtn.setVisible(false);
 			}
 			if (photo != null) {
 				imageView.setImage(photo.getImage());
 				captionLabel.setText("Caption: " + photo.getCaption());
-				deletePhotoBtn.setVisible(true);
 				viewPhotoBtn.setVisible(true);
 				
-				deletePhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent e) {
-						deletePhoto(e, photo);
-					}
-				});
 				
 				viewPhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override public void handle(ActionEvent e) {
@@ -435,32 +515,17 @@ public class Controller_SearchPhoto implements Controller_Logout{
 				});
 			}	
 		}
-		
-		public void deletePhoto(ActionEvent event, Photo photo) {
-			Alert alert = 
-	 				   new Alert(AlertType.INFORMATION);
-	 		alert.setTitle("Delete photo");
-	 		alert.setHeaderText("There's no going back!");
-	 		alert.setContentText("Are you sure you want to delete this photo?");
 
-	 		Optional<ButtonType> result = alert.showAndWait();
-	 		   
-	 		if(result.isPresent()) {
-	 			for (Album a: user.getAlbums()) {
-		 			int i = a.findIndexByPhoto(photo);
-		 			a.removePhoto(i);
-		 			photoObsList.remove(photo);
-		 			try {
-						UserList.writeUserList(ulist);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	 			}
-	 		  }
-		}
-
+		/**
+		 * View photo.
+		 *
+		 * @param e the e
+		 * @param photo the photo
+		 * @throws IOException Signals that an I/O exception has occurred.
+		 * @throws ClassNotFoundException the class not found exception
+		 */
 		public void viewPhoto(ActionEvent e, Photo photo) throws IOException, ClassNotFoundException {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PhotoDisplay.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ViewPhoto.fxml"));
 	        Parent parent = (Parent) loader.load();
 	        Controller_DisplayPhoto ctrl = loader.<Controller_DisplayPhoto>getController();
 	        //send user index to album list controller

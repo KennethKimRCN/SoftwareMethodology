@@ -3,12 +3,18 @@ package app;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import model.Photo;
+import model.User;
+import model.UserList;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
 /**
+ * The Class Photos.
+ *
  * @author Khangnyon Kim
  * @author Whitney Poh
  */
@@ -16,15 +22,24 @@ public class Photos extends Application {
 	
 	/**
 	 * This is the main driver class for the software
-	 * Troubleshooting: If the software does not start up, you must initialize the admin account first. 
+	 * Troubleshooting: If the software does not start up, you must initialize the admin account first.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException the class not found exception
 	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
-		//Initialize user file so it won't crash when executed
+		/**
+		 * Warning:
+		 * Un-commenting the code block below will hard reset the user list.
+		 */
 		/*
 		UserList ulist = new UserList();
 		ulist.addUser(new User("admin"));
+		ulist.addUser(new User("stock"));
 		UserList.writeUserList(ulist);
+
 		System.out.println("Initialization successful!");
 		*/
 		
@@ -44,6 +59,11 @@ public class Photos extends Application {
 		}
 	}
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

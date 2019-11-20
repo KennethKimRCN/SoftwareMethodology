@@ -31,23 +31,45 @@ import model.User;
 import model.UserList;
 
 /**
+ * The Class Controller_UserList.
+ *
  * @author Khangnyon Kim
  * @author Whiteny Poh
  */
 public class Controller_UserList implements Controller_Logout {
+	
+	/** The table. */
 	@FXML
 	TableView<User> table;
 	
+	/** The username. */
+	@FXML
+	TextField username;
+	
+	/** The username column. */
 	@FXML
 	TableColumn<User,String> usernameColumn;
 			
+	/** The delete column. */
 	@FXML
 	TableColumn<User,User> deleteColumn;
 	
+	/** The obs list. */
 	private ObservableList<User> obsList;
+	
+	/** The users. */
 	private List<User> users = new ArrayList<User>();
+	
+	/** The ulist. */
 	private UserList ulist;
 	
+	/**
+	 * Start.
+	 *
+	 * @param mainStage the main stage
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void start(Stage mainStage) throws ClassNotFoundException, IOException {
 		ulist = UserList.readUserList();
 		users = ulist.getUsers();
@@ -107,12 +129,20 @@ public class Controller_UserList implements Controller_Logout {
 	  if (!obsList.isEmpty())
 		  table.getSelectionModel().select(0);
 	}
+	
+	/**
+	 * Handle add button.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	   private void handleAddButton(ActionEvent event) throws IOException {
 		  int index = table.getSelectionModel().getSelectedIndex();
+		  
 		   Dialog<User> dialog = new Dialog<>();
 		   dialog.setTitle("Create a New User");
-		   dialog.setHeaderText("Add a new user to PhotoBox!");
+		   dialog.setHeaderText("Add a new user to Photos!");
 		   dialog.setResizable(true);
 		   
 		   Label usernameLabel = new Label("Username: ");
@@ -179,10 +209,11 @@ public class Controller_UserList implements Controller_Logout {
 	   }
 	   
 	   /**
-	    * 
-	    * Check the fields, return null if no errors found
-	    * @return the error message in string format, null if no errors
-	    */
+   	 * Check the fields, return null if no errors found.
+   	 *
+   	 * @param username the username
+   	 * @return the error message in string format, null if no errors
+   	 */
 	   private String checkFields(String username) {
 		   if (username.trim().isEmpty())
 			   return "Username is a required field.";
@@ -191,6 +222,13 @@ public class Controller_UserList implements Controller_Logout {
 		   else	   
 			   return null;
 	   }
+	
+	/**
+	 * Handle logout button.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML 
 	protected void handleLogoutButton(ActionEvent event) throws ClassNotFoundException {
 	    logout(event);     

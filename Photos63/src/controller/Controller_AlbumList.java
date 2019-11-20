@@ -37,23 +37,39 @@ import model.User;
 import model.UserList;
 
 /**
+ * The Class Controller_AlbumList.
+ *
  * @author Khangnyon Kim
  * @author Whitney Poh
  */
 public class Controller_AlbumList implements Controller_Logout {
 	
+	/** The album list view. */
 	@FXML
 	ListView<Album> albumListView;
 	
+	/** The name text. */
 	@FXML
 	Text nameText;
 	
+	/** The obs list. */
 	private ObservableList<Album> obsList;
+	
+	/** The albums. */
 	private List<Album> albums = new ArrayList<Album>();
+	
+	/** The user. */
 	private User user;
+	
+	/** The ulist. */
 	private UserList ulist;
 	
 	
+	/**
+	 * Start.
+	 *
+	 * @param mainStage the main stage
+	 */
 	public void start(Stage mainStage) {
 		
 		nameText.setText(user.getUsername() + "'s Album");
@@ -75,6 +91,13 @@ public class Controller_AlbumList implements Controller_Logout {
 
 	}
 	
+	/**
+	 * Go to album.
+	 *
+	 * @param mainStage the main stage
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void goToAlbum(Stage mainStage) throws ClassNotFoundException, IOException {
 		int index = albumListView.getSelectionModel().getSelectedIndex();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Photos.fxml"));
@@ -90,11 +113,24 @@ public class Controller_AlbumList implements Controller_Logout {
 		
 	}
 	
+	/**
+	 * Handle logout.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML
 	protected void handleLogout(ActionEvent event) throws ClassNotFoundException {
     	logout(event);       
 	}
 	
+	/**
+	 * Search photos.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML
 	private void searchPhotos(ActionEvent event) throws IOException, ClassNotFoundException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Search.fxml"));
@@ -112,6 +148,12 @@ public class Controller_AlbumList implements Controller_Logout {
 		app_stage.show();
 	}
 	
+	/**
+	 * Adds the album.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	private void addAlbum(ActionEvent event) throws IOException {
 		int index = albumListView.getSelectionModel().getSelectedIndex();
@@ -187,6 +229,12 @@ public class Controller_AlbumList implements Controller_Logout {
 		}
 	}
 	
+	/**
+	 * Check fields.
+	 *
+	 * @param albumName the album name
+	 * @return the string
+	 */
 	private String checkFields(String albumName) {
 		if (albumName.trim().isEmpty())
 			return "Album Name is a required field.";
@@ -196,28 +244,62 @@ public class Controller_AlbumList implements Controller_Logout {
 			return null;
 	}
 	
+	/**
+	 * Sets the user.
+	 *
+	 * @param u the new user
+	 */
 	public void setUser(User u) {
 		this.user = u;
 	}
 	
+	/**
+	 * Sets the ulist.
+	 *
+	 * @param ulist the new ulist
+	 */
 	public void setUlist(UserList ulist) {
 		this.ulist = ulist;
 	}
 	
+	/**
+	 * The Class AlbumCell.
+	 */
 	private class AlbumCell extends ListCell<Album> {
 			
+		/** The apane. */
 		AnchorPane apane = new AnchorPane();
+		
+		/** The spane. */
 		StackPane spane = new StackPane();
 		
+		/** The image view. */
 		ImageView imageView = new ImageView();
+		
+		/** The album name label. */
 		Label albumNameLabel = new Label();
+		
+		/** The date range label. */
 		Label dateRangeLabel = new Label();
+		
+		/** The oldest photo label. */
 		Label oldestPhotoLabel = new Label();
+		
+		/** The num photos label. */
 		Label numPhotosLabel = new Label();
+		
+		/** The delete album btn. */
 		Button deleteAlbumBtn = new Button("Delete");
+		
+		/** The rename album btn. */
 		Button renameAlbumBtn = new Button("Rename");
+		
+		/** The view album btn. */
 		Button viewAlbumBtn = new Button("View");
 			
+		/**
+		 * Instantiates a new album cell.
+		 */
 		public AlbumCell() {
 			super();
 			imageView.setFitWidth(90.0);
@@ -271,6 +353,12 @@ public class Controller_AlbumList implements Controller_Logout {
 			setGraphic(apane);
 		}
 			
+		/**
+		 * Update item.
+		 *
+		 * @param album the album
+		 * @param empty the empty
+		 */
 		@Override
 		public void updateItem(Album album, boolean empty) {
 			super.updateItem(album, empty);
@@ -321,6 +409,12 @@ public class Controller_AlbumList implements Controller_Logout {
 			
 		}
 		
+		/**
+		 * Delete album.
+		 *
+		 * @param event the event
+		 * @param album the album
+		 */
 		public void deleteAlbum(ActionEvent event, Album album) {
 			Alert alert = 
 	 				   new Alert(AlertType.INFORMATION);
@@ -353,6 +447,12 @@ public class Controller_AlbumList implements Controller_Logout {
 	 		  }
 		}
 		
+		/**
+		 * Rename album.
+		 *
+		 * @param e the e
+		 * @param album the album
+		 */
 		public void renameAlbum(ActionEvent e, Album album) {
 			   Dialog<User> dialog = new Dialog<>();
 			   dialog.setTitle("Rename Album");
@@ -403,6 +503,14 @@ public class Controller_AlbumList implements Controller_Logout {
 		
 		}
 		
+		/**
+		 * Go to album content.
+		 *
+		 * @param e the e
+		 * @param album the album
+		 * @throws IOException Signals that an I/O exception has occurred.
+		 * @throws ClassNotFoundException the class not found exception
+		 */
 		public void goToAlbumContent(ActionEvent e, Album album) throws IOException, ClassNotFoundException {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Photos.fxml"));
 	        Parent parent = (Parent) loader.load();

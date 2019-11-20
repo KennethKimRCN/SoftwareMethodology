@@ -16,17 +16,33 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.UserList;
+
 /**
+ * The Class Controller_Login.
+ *
  * @author Khangnyon Kim
  * @author Whiteny Poh
  */
 public class Controller_Login {
 	
+	/** The username field. */
 	@FXML TextField usernameField;
+	
+	/** The login. */
 	@FXML Button login;
+	
+	/** The exit. */
 	@FXML Button exit;
+	
+	/** The error display. */
 	@FXML Text errorDisplay;
 		
+	/**
+	 * Login.
+	 *
+	 * @param event the event
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	@FXML
 	public void login(ActionEvent event) throws ClassNotFoundException{
 		String username = usernameField.getText().trim();
@@ -88,6 +104,11 @@ public class Controller_Login {
 			}
 	}
 	
+	/**
+	 * Exit.
+	 *
+	 * @param e the e
+	 */
 	@FXML
 	public void exit(ActionEvent e) {
 		exit.setOnAction(i -> Platform.exit());

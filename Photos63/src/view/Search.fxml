@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="316.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller_SearchPhoto">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="510.0" prefWidth="361.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller_SearchPhoto">
 	<top>
       <AnchorPane prefHeight="191.0" prefWidth="337.0" BorderPane.alignment="CENTER">
          <children>
@@ -51,7 +51,7 @@
       </AnchorPane>
    </top>
    <center>
-      <ListView fx:id="photoListView" prefHeight="16.0" prefWidth="361.0" BorderPane.alignment="CENTER">
+      <ListView fx:id="photoListView" prefHeight="176.0" prefWidth="361.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
