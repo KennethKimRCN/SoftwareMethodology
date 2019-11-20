@@ -90,14 +90,14 @@ public class Controller_AlbumList implements Controller_Logout {
 		
 	}
 	
-	@FXML 
-	protected void handleLogoutButton(ActionEvent event) throws ClassNotFoundException {
+	@FXML
+	protected void handleLogout(ActionEvent event) throws ClassNotFoundException {
     	logout(event);       
 	}
 	
 	@FXML
 	private void searchPhotos(ActionEvent event) throws IOException, ClassNotFoundException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PhotoSearch.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Search.fxml"));
         Parent parent = (Parent) loader.load();
         Controller_SearchPhoto ctrl = loader.<Controller_SearchPhoto>getController();
         ctrl.setUser(user);
@@ -113,7 +113,7 @@ public class Controller_AlbumList implements Controller_Logout {
 	}
 	
 	@FXML
-	private void handleAddButton(ActionEvent event) throws IOException {
+	private void addAlbum(ActionEvent event) throws IOException {
 		int index = albumListView.getSelectionModel().getSelectedIndex();
 		Dialog<Album> dialog = new Dialog<>();
 		dialog.setTitle("Create a New Album");
@@ -220,9 +220,6 @@ public class Controller_AlbumList implements Controller_Logout {
 			
 		public AlbumCell() {
 			super();
-		
-			
-			
 			imageView.setFitWidth(90.0);
 			imageView.setFitHeight(90.0);
 			imageView.setPreserveRatio(true);
@@ -251,13 +248,13 @@ public class Controller_AlbumList implements Controller_Logout {
 			
 			deleteAlbumBtn.setVisible(false);
 			
-			AnchorPane.setLeftAnchor(deleteAlbumBtn, 100.0);
+			AnchorPane.setRightAnchor(deleteAlbumBtn, 0.0);
 			AnchorPane.setBottomAnchor(deleteAlbumBtn, 0.0);
 			
 			renameAlbumBtn.setVisible(false);
 			
 			AnchorPane.setRightAnchor(renameAlbumBtn, 0.0);
-			AnchorPane.setBottomAnchor(renameAlbumBtn, 0.0);
+			AnchorPane.setBottomAnchor(renameAlbumBtn, 30.0);
 			
 			viewAlbumBtn.setVisible(false);
 			

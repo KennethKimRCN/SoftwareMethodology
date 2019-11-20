@@ -65,10 +65,9 @@ public class Controller_Login {
 							
 				}
 				else{
-					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/User.fxml"));
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Home.fxml"));
 					parent = (Parent) loader.load();
 					Controller_AlbumList ctrl = loader.<Controller_AlbumList>getController();
-					//send user index to album list controller
 					ctrl.setUlist(ulist);
 					ctrl.setUser(ulist.getUsername(username));
 					Scene scene = new Scene(parent);

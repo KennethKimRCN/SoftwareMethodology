@@ -115,7 +115,7 @@ public class Controller_PhotoList implements Controller_Logout{
    	 
 		try {
 				
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/NonAdminHome.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Home.fxml"));
 	        parent = (Parent) loader.load();
 	        Controller_AlbumList ctrl = loader.<Controller_AlbumList>getController();
 	        //send user index to album list controller
