@@ -217,8 +217,9 @@ public class Controller_PhotoList implements Controller_Logout{
 		ImageView imageView = new ImageView();
 		Label captionLabel = new Label();
 		Button deletePhotoBtn = new Button("Delete");
-		Button editPhotoBtn = new Button("Edit");
+		Button editPhotoBtn = new Button("Caption");
 		Button movePhotoBtn = new Button("Move");
+		Button copyPhotoBtn = new Button("Copy");
 		Button viewPhotoBtn = new Button("View");
 			
 		public PhotoCell() {
@@ -252,13 +253,17 @@ public class Controller_PhotoList implements Controller_Logout{
 			AnchorPane.setLeftAnchor(viewPhotoBtn, 115.0);
 			AnchorPane.setBottomAnchor(viewPhotoBtn, 0.0);
 			
+			AnchorPane.setRightAnchor(copyPhotoBtn, 120.0);
+			AnchorPane.setBottomAnchor(copyPhotoBtn, 0.0);
+			
 			deletePhotoBtn.setVisible(false);
 			editPhotoBtn.setVisible(false);
 			movePhotoBtn.setVisible(false);
 			viewPhotoBtn.setVisible(false);
+			copyPhotoBtn.setVisible(false);
 			
 			apane.getChildren().addAll(spane, captionLabel,
-					deletePhotoBtn, editPhotoBtn, movePhotoBtn, viewPhotoBtn);
+					deletePhotoBtn, editPhotoBtn, movePhotoBtn, viewPhotoBtn, copyPhotoBtn);
 			
 			apane.setPrefHeight(55.0);
 			
@@ -278,6 +283,7 @@ public class Controller_PhotoList implements Controller_Logout{
 				deletePhotoBtn.setVisible(false);
 				editPhotoBtn.setVisible(false);
 				movePhotoBtn.setVisible(false);
+				copyPhotoBtn.setVisible(false);
 				viewPhotoBtn.setVisible(false);
 			}
 			if (photo != null) {
@@ -286,6 +292,7 @@ public class Controller_PhotoList implements Controller_Logout{
 				deletePhotoBtn.setVisible(true);
 				editPhotoBtn.setVisible(true);
 				movePhotoBtn.setVisible(true);
+				copyPhotoBtn.setVisible(true);
 				viewPhotoBtn.setVisible(true);
 				
 				deletePhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -303,6 +310,12 @@ public class Controller_PhotoList implements Controller_Logout{
 				movePhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override public void handle(ActionEvent e) {
 						movePhoto(e, photo);
+					}
+				});
+				
+				copyPhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override public void handle(ActionEvent e) {
+						copyPhoto(e, photo);
 					}
 				});
 				
@@ -382,10 +395,7 @@ public class Controller_PhotoList implements Controller_Logout{
 					  {
 						  i.printStackTrace();
 					  }
-				   
 				   }
-					   
-
 		}
 		
 		public void movePhoto(ActionEvent e, Photo photo) {
@@ -432,6 +442,59 @@ public class Controller_PhotoList implements Controller_Logout{
 				obsList.remove(photo);
 				int index = album.findIndexByPhoto(photo);
 				album.removePhoto(index);
+				
+				updateAlbumDetails();
+			  try{
+				  UserList.writeUserList(ulist);
+			  }
+			  catch(Exception i)
+			  {
+				  i.printStackTrace();
+			  }
+			}
+		}
+		
+		public void copyPhoto(ActionEvent e, Photo photo) {
+			
+			Dialog<Album> dialog = new Dialog<>();
+			dialog.setTitle("Copy Photo");
+			dialog.setHeaderText("Copy this photo to another album");
+			dialog.setResizable(true);
+			   
+			Label moveLabel = new Label("Album to copy this photo to: ");
+			
+			List<String> albumNames = new ArrayList<String>();
+			for(Album a : user.getAlbums())
+			{
+				String temp = a.getName();
+				if(a.getName()!= album.getName())
+					albumNames.add(temp);
+			}
+			
+			ObservableList<String> options = 
+			FXCollections.observableArrayList(albumNames);
+			
+			
+			ComboBox<String> moveComboBox = new ComboBox<String>(options);
+	    
+			   
+			GridPane grid = new GridPane();
+			grid.add(moveLabel, 1, 1);
+			grid.add(moveComboBox, 1, 2);
+			   
+			dialog.getDialogPane().setContent(grid);
+			   
+			ButtonType buttonTypeOk = new ButtonType("Copy", ButtonData.OK_DONE);
+			dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+			   
+			//wait for response from move button
+			Optional<Album> result = dialog.showAndWait();
+			 
+			//If user presses move
+			if (result.isPresent()) {
+				String newAlbumName = moveComboBox.getSelectionModel().getSelectedItem();
+				Album newAlbum = user.getAlbumByName(newAlbumName);
+				newAlbum.addPhoto(photo);
 				
 				updateAlbumDetails();
 			  try{
