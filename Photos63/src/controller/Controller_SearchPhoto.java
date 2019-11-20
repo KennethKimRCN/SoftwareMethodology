@@ -363,7 +363,6 @@ public class Controller_SearchPhoto implements Controller_Logout{
 		ImageView imageView = new ImageView();
 		Label captionLabel = new Label();
 		Button deletePhotoBtn = new Button("Delete");
-		Button editPhotoBtn = new Button("Edit");
 		Button viewPhotoBtn = new Button("View");
 			
 		public SearchPhotoCell() {
@@ -388,17 +387,12 @@ public class Controller_SearchPhoto implements Controller_Logout{
 			AnchorPane.setRightAnchor(deletePhotoBtn, 0.0);
 			AnchorPane.setBottomAnchor(deletePhotoBtn, 0.0);
 			
-			AnchorPane.setLeftAnchor(editPhotoBtn, 55.0);
-			AnchorPane.setBottomAnchor(editPhotoBtn, 0.0);
-			
 			AnchorPane.setLeftAnchor(viewPhotoBtn, 115.0);
 			AnchorPane.setBottomAnchor(viewPhotoBtn, 0.0);
 			
 			deletePhotoBtn.setVisible(false);
-			editPhotoBtn.setVisible(false);
 			viewPhotoBtn.setVisible(false);
-			apane.getChildren().addAll(spane, captionLabel, deletePhotoBtn,
-					editPhotoBtn, viewPhotoBtn);
+			apane.getChildren().addAll(spane, captionLabel, deletePhotoBtn, viewPhotoBtn);
 			
 			apane.setPrefHeight(55.0);
 			
@@ -416,25 +410,17 @@ public class Controller_SearchPhoto implements Controller_Logout{
 				imageView.setImage(null);
 				captionLabel.setText("");
 				deletePhotoBtn.setVisible(false);
-				editPhotoBtn.setVisible(false);
 				viewPhotoBtn.setVisible(false);
 			}
 			if (photo != null) {
 				imageView.setImage(photo.getImage());
 				captionLabel.setText("Caption: " + photo.getCaption());
 				deletePhotoBtn.setVisible(true);
-				editPhotoBtn.setVisible(true);
 				viewPhotoBtn.setVisible(true);
 				
 				deletePhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override public void handle(ActionEvent e) {
 						deletePhoto(e, photo);
-					}
-				});
-				
-				editPhotoBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent e) {
-						editPhoto(e, photo);
 					}
 				});
 				
@@ -471,44 +457,6 @@ public class Controller_SearchPhoto implements Controller_Logout{
 					}
 	 			}
 	 		  }
-		}
-		
-		public void editPhoto(ActionEvent e, Photo photo) {
-			
-			Dialog<Album> dialog = new Dialog<>();
-			dialog.setTitle("Edit Caption");
-			dialog.setHeaderText("Edit the caption for this photo.");
-			dialog.setResizable(true);
-			   
-			Label captionLabel = new Label("Caption: ");
-			TextArea captionTextArea = new TextArea();
-			captionTextArea.setPromptText(photo.getCaption());
-			   
-			GridPane grid = new GridPane();
-			grid.add(captionLabel, 1, 1);
-			grid.add(captionTextArea, 2, 1);
-			   
-			dialog.getDialogPane().setContent(grid);
-			   
-			ButtonType buttonTypeOk = new ButtonType("Ok", ButtonData.OK_DONE);
-			dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-			   
-			   Optional<Album> result = dialog.showAndWait();
-			   
-					if (result.isPresent()) {
-					   photo.setCaption(captionTextArea.getText());
-					  updateItem(photo, true);
-					  try{
-						  UserList.writeUserList(ulist);
-					  }
-					  catch(Exception i)
-					  {
-						  i.printStackTrace();
-					  }
-				   
-				   }
-					   
-
 		}
 
 		public void viewPhoto(ActionEvent e, Photo photo) throws IOException, ClassNotFoundException {

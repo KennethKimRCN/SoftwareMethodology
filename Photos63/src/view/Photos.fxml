@@ -21,7 +21,7 @@
          	<StackPane prefHeight="90.0" prefWidth="90.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0">
          	   <ImageView fx:id="albumImageView" fitHeight="90.0" fitWidth="90.0" preserveRatio="true" StackPane.alignment="CENTER">
 	              <image>
-                     <Image url="@pic/album-icon.png" />
+                     <Image url="@../../img/album-icon.png" />
 	              </image>
 	           </ImageView>
 	        </StackPane>

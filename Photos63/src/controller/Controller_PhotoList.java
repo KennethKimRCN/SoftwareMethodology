@@ -1,17 +1,14 @@
 package controller;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -508,7 +505,7 @@ public class Controller_PhotoList implements Controller_Logout{
 		}
 		
 		public void viewPhoto(ActionEvent e, Photo photo) throws IOException, ClassNotFoundException {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PhotoDisplay.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ViewPhoto.fxml"));
 	        Parent parent = (Parent) loader.load();
 	        Controller_DisplayPhoto ctrl = loader.<Controller_DisplayPhoto>getController();
 	        ctrl.setPhotoIndex(album.findIndexByPhoto(photo));

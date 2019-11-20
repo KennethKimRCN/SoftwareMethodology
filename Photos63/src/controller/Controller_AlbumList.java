@@ -56,7 +56,7 @@ public class Controller_AlbumList implements Controller_Logout {
 	
 	public void start(Stage mainStage) {
 		
-		nameText.setText("Welcome, " + user.getUsername());
+		nameText.setText(user.getUsername() + "'s Album");
 		
 		albums = user.getAlbums();
 		
@@ -71,13 +71,13 @@ public class Controller_AlbumList implements Controller_Logout {
 			}
 		});	
 		
-		albumListView.setItems(obsList);;
+		albumListView.setItems(obsList);
 
 	}
 	
 	public void goToAlbum(Stage mainStage) throws ClassNotFoundException, IOException {
 		int index = albumListView.getSelectionModel().getSelectedIndex();
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumContent.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Photos.fxml"));
         Parent parent = (Parent) loader.load();
         Controller_PhotoList ctrl = loader.<Controller_PhotoList>getController();
         ctrl.setAlbum(albums.get(index));
@@ -404,7 +404,7 @@ public class Controller_AlbumList implements Controller_Logout {
 		}
 		
 		public void goToAlbumContent(ActionEvent e, Album album) throws IOException, ClassNotFoundException {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumContent.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Photos.fxml"));
 	        Parent parent = (Parent) loader.load();
 	        Controller_PhotoList ctrl = loader.<Controller_PhotoList>getController();
 	        ctrl.setAlbum(album);

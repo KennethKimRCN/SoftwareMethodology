@@ -78,7 +78,7 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 	   	 
 		try {
 			if (key == CAME_FROM_ALBUM_CONTENT) {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumContent.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Photos.fxml"));
 		        parent = (Parent) loader.load();
 		        Controller_PhotoList ctrl = loader.<Controller_PhotoList>getController();
 		        //send user index to album list controller
@@ -95,7 +95,7 @@ public class Controller_DisplayPhoto implements Controller_Logout{
 				app_stage.show();
 			}
 			if (key == CAME_FROM_PHOTO_SEARCH) {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PhotoSearch.fxml"));
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Search.fxml"));
 		        parent = (Parent) loader.load();
 		        Controller_SearchPhoto ctrl = loader.<Controller_SearchPhoto>getController();
 		        //send user index to album list controller
