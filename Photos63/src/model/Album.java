@@ -5,25 +5,26 @@ package model;
  */
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
+import javafx.scene.image.Image;
 import model.Photo;
 
 @SuppressWarnings("serial")
 public class Album implements Serializable{
 	private String name;
-	private ArrayList<Photo> photos;
-	private int photoCount;
+	private List<Photo> photos;
+	private Photo oldestPhoto, earliestPhoto;
 	
 	public Album(String name) {
 		this.name = name;
-		this.photos = new ArrayList<Photo>();
-		this.photoCount = 0;
+		oldestPhoto = null;
+		earliestPhoto = null;
+		photos = new ArrayList<Photo>();
 	}
 	
-	public Album() {
-		this.name = null;
-		this.photos = new ArrayList<Photo>();
-		this.photoCount = 0;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getName() {
@@ -31,33 +32,85 @@ public class Album implements Serializable{
 	}
 	
 	public String toString() {
-		return this.name;
+		return name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public Photo getPhoto(int index) {
+		return photos.get(index);
 	}
 	
-	public void addPhoto(Photo newPhoto) {
-		this.photos.add(newPhoto);
-		this.photoCount++;
+	public void addPhoto(Photo photo) {
+		photos.add(photo);
+		findOldestPhoto();
+		findEarliestPhoto();
 	}
 	
-	public void removePhoto(Photo removePhoto) {
-		for(Photo p: this.photos) {
-			if(p.equals(removePhoto)) {
-				this.photos.remove(p);
-				this.photoCount--;
-				return;
-			}
-		}
+	public void removePhoto(int index) {
+		photos.remove(index);
+		findOldestPhoto();
+		findEarliestPhoto();
 	}
 	
-	public ArrayList<Photo> getPhotoList(){
-		return this.photos;
+	public int getCount() {
+		return photos.size();
 	}
 	
-	public int getPhotoCount() {
-		return this.photoCount;
+	public List<Photo> getPhotos() {
+		return photos;
+	}
+	
+	public void findOldestPhoto() {
+		if (photos.size() == 0)
+			return;
+		
+		Photo temp = photos.get(0);
+		
+		for (Photo p : photos)
+			if (p.getCalendar().compareTo(temp.getCalendar()) < 0)
+				temp = p;
+		
+		oldestPhoto = temp;
+	}
+	
+	public void findEarliestPhoto() {
+		if (photos.size() == 0)
+			return;
+		
+		Photo temp = photos.get(0);
+		
+		for (Photo p : photos)
+			if (p.getCalendar().compareTo(temp.getCalendar()) > 0)
+				temp = p;
+		
+		earliestPhoto = temp;
+	}
+	
+	public String getOldestPhotoDate() {
+		if (oldestPhoto == null)
+			return "NA";
+		return oldestPhoto.getDate();
+	}
+	
+	public String getEarliestPhotoDate() {
+		if (earliestPhoto == null)
+			return "NA";
+		return earliestPhoto.getDate();
+	}
+	
+	public String getDateRange() {
+		return getOldestPhotoDate() + " - " + getEarliestPhotoDate();
+	}
+	
+	public Image getAlbumPhoto() {
+		if (photos.isEmpty())
+			return null;
+		return photos.get(0).getImage();
+	}
+	
+	public int findIndexByPhoto(Photo photo) {
+		for (int i = 0; i < photos.size(); i++)
+			if (photos.get(i).equals(photo))
+				return i;
+		return -1;
 	}
 }
