@@ -29,7 +29,7 @@ public class UserList implements Serializable{
 	public static final String storeFile = "users.dat";
 	
 	public static void writeUserList(UserList list) throws IOException{
-		FileOutputStream fileOut = new FileOutputStream(storeDir + File.separator + storeFile);
+		FileOutputStream fileOut = new FileOutputStream("c:\\Photos63\\user.dat");
 		ObjectOutputStream output = new ObjectOutputStream(fileOut);
 		output.writeObject(list);
 		output.close();
@@ -37,7 +37,7 @@ public class UserList implements Serializable{
 	}
 	
 	public static UserList readUserList() throws IOException, ClassNotFoundException{
-		FileInputStream fileIn = new FileInputStream(storeDir + File.separator + storeFile);
+		FileInputStream fileIn = new FileInputStream("c:\\Photos63\\user.dat");
 		ObjectInputStream input = new ObjectInputStream(fileIn);
 		UserList users = (UserList) input.readObject();
 		input.close();

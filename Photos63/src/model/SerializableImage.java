@@ -1,5 +1,8 @@
 package model;
-
+/**
+ * @author Khangnyon Kim
+ * @author Whiteny Poh
+ */
 import java.io.Serializable;
 
 import javafx.scene.image.Image;
