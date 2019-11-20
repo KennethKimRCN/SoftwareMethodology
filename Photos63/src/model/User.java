@@ -15,7 +15,7 @@ import java.util.List;
  * 5. Checks if album name already exists
  */
 @SuppressWarnings("serial")
-public abstract class User implements Serializable{
+public class User implements Serializable{
 	private String username;
 	private List<Album> albums;
 

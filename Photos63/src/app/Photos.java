@@ -3,8 +3,10 @@ package app;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import model.User;
+import model.UserList;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
@@ -21,18 +23,17 @@ public class Photos extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
 		//Initialize user file so it won't crash when executed
-		/*
 		UserList ulist = new UserList();
-		ulist.addUserToList(new User("admin"));
-		UserList.write(ulist);
+		ulist.addUser(new User("admin"));
+		UserList.writeUserList(ulist);
 		System.out.println("Initialization successful!");
-		*/
+		
 		
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/view/Login.fxml"));
-			BorderPane root = (BorderPane)loader.load();
-			Scene scene = new Scene(root, 360, 640);
+			AnchorPane root = (AnchorPane)loader.load();
+			Scene scene = new Scene(root, 360, 280);
 			
 			
 			primaryStage.setScene(scene);

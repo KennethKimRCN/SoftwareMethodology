@@ -1,5 +1,8 @@
 package model;
-
+/**
+ * @author Khangnyon Kim
+ * @author Whiteny Poh
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -55,6 +58,14 @@ public class UserList implements Serializable{
 				return true;
 		}
 		return false;
+	  }
+	
+	public User getUsername(String username) {
+		  for (User u : users){
+			  if (u.getUsername().equals(username))
+				  return u;
+		  }
+		  return null;
 	  }
 	
 	public String toString() {
