@@ -150,8 +150,7 @@ public class Controller_PhotoList implements Controller_Logout{
 		if (file == null)
 			return;
 		
-        BufferedImage bufferedImage = ImageIO.read(file);
-        Image image = SwingFXUtils.toFXImage(bufferedImage, null);
+        Image image = new Image(file.toURI().toString());
         
         //check to see if this photo exists in the album
         SerializableImage tempImage = new SerializableImage();
@@ -449,7 +448,6 @@ public class Controller_PhotoList implements Controller_Logout{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PhotoDisplay.fxml"));
 	        Parent parent = (Parent) loader.load();
 	        Controller_DisplayPhoto ctrl = loader.<Controller_DisplayPhoto>getController();
-	        //send user index to album list controller
 	        ctrl.setPhotoIndex(album.findIndexByPhoto(photo));
 	        ctrl.setAlbum(album);
 	        ctrl.setUser(user);
