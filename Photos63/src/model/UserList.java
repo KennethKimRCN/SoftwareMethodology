@@ -18,7 +18,11 @@ public class UserList implements Serializable{
 	}
 	
 	public void addUser(User user) {
-		this.users.add(user);
+		users.add(user);
+	}
+	
+	public void removeUserFromList(User user){
+		users.remove(user);
 	}
 	
 	public ArrayList<User> getUsers(){
@@ -29,7 +33,7 @@ public class UserList implements Serializable{
 	public static final String storeFile = "users.dat";
 	
 	public static void writeUserList(UserList list) throws IOException{
-		FileOutputStream fileOut = new FileOutputStream("c:\\Photos63\\user.dat");
+		FileOutputStream fileOut = new FileOutputStream(storeDir + File.separator + storeFile);
 		ObjectOutputStream output = new ObjectOutputStream(fileOut);
 		output.writeObject(list);
 		output.close();
@@ -37,11 +41,29 @@ public class UserList implements Serializable{
 	}
 	
 	public static UserList readUserList() throws IOException, ClassNotFoundException{
-		FileInputStream fileIn = new FileInputStream("c:\\Photos63\\user.dat");
+		FileInputStream fileIn = new FileInputStream(storeDir + File.separator + storeFile);
 		ObjectInputStream input = new ObjectInputStream(fileIn);
 		UserList users = (UserList) input.readObject();
 		input.close();
 		fileIn.close();
 		return users;
 	}
+	
+	public boolean userExists(String user){
+		for(User u : users){
+			if (u.getUsername().equals(user))
+				return true;
+		}
+		return false;
+	  }
+	
+	public String toString() {
+		  if (users == null)
+			  return "no users";
+		  String output = "";
+		  for(User u : users){
+			  output += u.getUsername() + " ";
+		  }
+		  return output;
+	  }
 }
