@@ -54,9 +54,6 @@ public class Controller_UserList implements Controller_Logout {
 	@FXML
 	TableColumn<User,User> deleteColumn;
 	
-	/**login User**/
-	@FXML TextField loginUser;
-	
 	/** The obs list. */
 	private ObservableList<User> obsList;
 	
@@ -235,32 +232,5 @@ public class Controller_UserList implements Controller_Logout {
 	@FXML 
 	protected void handleLogoutButton(ActionEvent event) throws ClassNotFoundException {
 	    logout(event);     
-	}
-	/**
-	* log in for other users as an admin
-	*@param event the event
-	*@ throws Exception
-	*/
-	
-		@FXML
-	public void logIn(ActionEvent event) throws Exception{
-		if(ulist.userExists(loginUser.getText())) {
-			User user = ulist.getUsername(loginUser.getText());
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Home.fxml"));
-			Parent x = (Parent) loader.load();
-			Scene scene = new Scene(x);
-			Stage s = new Stage();
-			s.setScene(scene);
-			
-			Controller_AlbumList ctrl = loader.<Controller_AlbumList>getController();
-			ctrl.setUser(user);
-			
-			ctrl.setUlist(ulist);
-			
-			ctrl.start(s);
-			s.setScene(scene);
-			s.show();
-		}
 	}
 }
