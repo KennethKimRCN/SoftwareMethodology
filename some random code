@@ -1,0 +1,45 @@
+	public void setChessBoard(ChessBoard b) {
+		
+		Button a1 = findViewById(R.id.a1);
+		if(b.board[7][0].getPiece().team!='x') {
+			if(b.board[7][0].getPiece().getTeam()=='w') {
+				a1.setTextColor(0xFFFFFF);
+			}
+			else {
+				a1.setTextColor(0x000000);
+			}
+			a1.setText(b.board[7][0].getPiece().getDisplay());
+		}
+		else {
+			a1.setText("");
+		}
+		
+		Button b1 = findViewById(R.id.b1);
+		if(b.board[7][1].getPiece().team!='x') {
+			if(b.board[7][1].getPiece().getTeam()=='w') {
+				b1.setTextColor(0xFFFFFF);
+			}
+			else {
+				b1.setTextColor(0x000000);
+			}
+			b1.setText(b.board[7][1].getPiece().getDisplay());
+		}
+		else {
+			b1.setText("");
+		}
+		
+		Button c1 = findViewById(R.id.c1);
+		if(b.board[7][2].getPiece().team!='x') {
+			if(b.board[7][2].getPiece().getTeam()=='w') {
+				c1.setTextColor(0xFFFFFF);
+			}
+			else {
+				c1.setTextColor(0x000000);
+			}
+			c1.setText(b.board[7][2].getPiece().getDisplay());
+		}
+		else {
+			c1.setText("");
+		}
+		
+		//gonna do this for all 64 chess squares
