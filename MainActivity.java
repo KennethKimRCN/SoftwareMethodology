@@ -1,5 +1,3 @@
-//this is for testing if the buttons work like they should
-
 package com.example.chessproject;
 
 import android.os.Bundle;
@@ -20,6 +18,8 @@ import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity {
 
+    public Board b;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,22 +27,116 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        boolean GameOver = false;
-        Board b = new Board();
+        b = new Board();
 
-        while(GameOver==false){
+
+        final Button Resign = findViewById(R.id.Resign);
+
+        final Button[][] boardClick =
+                {{findViewById(R.id.a8),findViewById(R.id.b8),findViewById(R.id.c8),findViewById(R.id.d8),findViewById(R.id.e8),findViewById(R.id.f8),findViewById(R.id.g8),findViewById(R.id.h8)},{findViewById(R.id.a7),findViewById(R.id.b7),findViewById(R.id.c7),findViewById(R.id.d7),findViewById(R.id.e7),findViewById(R.id.f7),findViewById(R.id.g7),findViewById(R.id.h7)},
+                        {findViewById(R.id.a6),findViewById(R.id.b6),findViewById(R.id.c6),findViewById(R.id.d6),findViewById(R.id.e6),findViewById(R.id.f6),findViewById(R.id.g6),findViewById(R.id.h6)},{findViewById(R.id.a5),findViewById(R.id.b5),findViewById(R.id.c5),findViewById(R.id.d5),findViewById(R.id.e5),findViewById(R.id.f5),findViewById(R.id.g5),findViewById(R.id.h5)},
+                        {findViewById(R.id.a4),findViewById(R.id.b4),findViewById(R.id.c4),findViewById(R.id.d4),findViewById(R.id.e4),findViewById(R.id.f4),findViewById(R.id.g4),findViewById(R.id.h4)},{findViewById(R.id.a3),findViewById(R.id.b3),findViewById(R.id.c3),findViewById(R.id.d3),findViewById(R.id.e3),findViewById(R.id.f3),findViewById(R.id.g3),findViewById(R.id.h3)},
+                        {findViewById(R.id.a2),findViewById(R.id.b2),findViewById(R.id.c2),findViewById(R.id.d2),findViewById(R.id.e2),findViewById(R.id.f2),findViewById(R.id.g2),findViewById(R.id.h2)},{findViewById(R.id.a1),findViewById(R.id.b1),findViewById(R.id.c1),findViewById(R.id.d1),findViewById(R.id.e1),findViewById(R.id.f1),findViewById(R.id.g1),findViewById(R.id.h1)}};
+
+        final int[] i = new int[1];
+        i[0]=0;
+
+        for(i[0]=0;i[0]<200;i[0]++){
+            final boolean[] gameOver = new boolean[1];
+            final Coord[] move = new Coord[2];
+            gameOver[0]=false;
+            move[0]=new Coord();
+            move[1]=new Coord();
+
+            Resign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gameOver[0] = true;
+                    if(gameOver[0]){
+                        Resign.setText("True");
+                    }
+                }
+            });
+
+            if(gameOver[0]){
+                Resign.setText("aa");
+                break;
+            }
+
+            final int[] m = new int[1];
+            m[0] = 0;
+
+            final int[] n = new int[1];
+            n[0] = 0;
+
+            for(m[0]=0;m[0]<8;m[0]++){
+                for(n[0]=0;n[0]<8;n[0]++){
+                    //boardClick[m[0]][n[0]].setText(m[0]+" "+n[0]);
+                    boardClick[m[0]][n[0]].setText(b.tile[n[0]][m[0]].tosString(b.tile[n[0]][m[0]]));
+                    //this line is giving me trouble
+                }
+            }
+
+            if((move[0].getX()==-1)||(move[1].getX()==-1)){
+
+                final int[] j = new int[1];
+                j[0]=0;
+                final int[] k = new int[1];
+                k[0]=0;
+
+                for(j[0]=0;j[0]<8;j[0]++) {
+                  for (k[0] = 0; k[0] < 8; k[0]++) {
+                    boardClick[j[0]][k[0]].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (move[0].getX() == -1) {
+                                move[0] = new Coord(k[0], j[0]);
+                            } else if (move[1].getX() == -1) {
+                                move[1] = new Coord(k[0], j[0]);
+                            }
+                        }
+                    });
+                  }
+                 }
+            }
+
+
+
+
+
+        }
+    }
+
+
+/*
+
+        while (true) {
+            final String g = "";
+
+            Resign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    g.concat(".");
+                }
+            });
+
+            if (!g.isEmpty()) {
+                Resign.setText("...");
+                break;
+            }
+
             String m = "";
-            while(!movePiece(m,true)){
+            while(!movePiece(m,true, b)){
                 m = move(b);
-                if(movePiece(m,true)){
-                 movePiece(m,true);
+                if(movePiece(m,true, b)){
+                 movePiece(m,true,b);
                  break;
                 }
             }
-            while(!movePiece(m,false)){
+            while(!movePiece(m,false,b)){
                 m = move(b);
-                if(movePiece(m,false)){
-                    movePiece(m,false);
+                if(movePiece(m,false,b)){
+                    movePiece(m,false,b);
                     break;
                 }
             }
@@ -50,82 +144,33 @@ public class MainActivity extends AppCompatActivity {
             //need to implement gameover check
         }
 
+*/
 
 
 
-    }
 
-    public String move(final Board b){
-        final String m = "";
+    public String[] move(){
+        final String[] m = new String[2];
+        m[0] = "";
+        m[1] = "";
 
-        Button a1 = findViewById(R.id.a1);
+        final Button a1 = findViewById(R.id.a1);
 
-        while(m.length()<6) {
-
-            a1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!m.isEmpty()) {
-                        m.concat("a1");
-                    } else {
-                        m.concat(" a1");
-                    }
-                    return;
-                }
-            });
-
-            Button a2 = findViewById(R.id.a2);
+        while((m[0].isEmpty()) || (m[1].isEmpty())) {
 
             a1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!m.isEmpty()) {
-                        m.concat("a2");
+                    if (!m[0].isEmpty()) {
+                        m[0]="a1";
                     } else {
-                        m.concat(" a2");
+                        m[1]="a1";
                     }
-                    return;
+                    a1.setText(m[0]+" "+m[1]);
                 }
             });
-            Button a3 = findViewById(R.id.a3);
 
-            a1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!m.isEmpty()) {
-                        m.concat("a3");
-                    } else {
-                        m.concat(" a3");
-                    }
-                    return;
-                }
-            });
-            Button a4 = findViewById(R.id.a4);
 
-            a1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!m.isEmpty()) {
-                        m.concat("a4");
-                    } else {
-                        m.concat(" a4");
-                    }
-                    return;
-                }
-            });
-            Button a5 = findViewById(R.id.a5);
-
-            a1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!m.isEmpty()) {
-                        m.concat("a5");
-                    } else {
-                        m.concat(" a5");
-                    }
-                    return;
-                }
-            });
 
             //if these 5 buttons work I'll add all 64 other buttons
         }
@@ -137,18 +182,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private static boolean movePiece(String s, boolean player) {
+    private static boolean movePiece(String s, boolean player, Board board) {
 
-        /**
-         * Only accepts regular input (+ draw?)
-         * Anything else is considered invalid input (except resign or draw)
-         */
+
         if(!(s.length() == 5 || s.length() == 11))
             return false;
 
-        /**
-         * "Spell checking" for regular input
-         */
         if(s.charAt(0) > 'h' || s.charAt(0) < 'a')
             return false;
         if(s.charAt(1) > '8' || s.charAt(1) < '1')
@@ -220,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private static void resetEPvalue(boolean player) {
+    private static void resetEPvalue(boolean player, Board board) {
 
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
@@ -234,14 +273,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Rule for stalemate:
-     * 1. No pieces are able to move except for King piece
-     * 2. King piece is in a position where if it moves then it is in check
-     *
-     * @return true if stalemate applies, false otherwise
-     */
-    private static boolean stalemate(boolean player) {
+
+    public static Coord getPosition(String s) {
+
+        char c1 = s.charAt(0);
+        char c2 = s.charAt(1);
+
+        int x = c1 - 97;
+        if(x < 0 || x > 7) // Out of bound
+            return null;
+
+        int y = 56 - c2;
+        if(y < 0 || y > 7) // Out of bound
+            return null;
+
+        return new Coord(x, y);
+    }
+    private static boolean stalemate(boolean player, Board board) {
         Coord wK_pos = null, bK_pos = null, test;
         if (!player) {
             for(int i = 0; i < 8; i++) {
@@ -323,4 +371,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
