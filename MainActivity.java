@@ -1902,6 +1902,17 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        if(!board.tile[start.getY()][start.getX()].piece.legalMove(start,end,board)){
+            return false;
+        }
+
+        if(player&& whiteCheck()){
+
+        }
+        if(!player&& blackCheck()){
+            
+        }
+
         //Check input included a promotion character
         /*if(s.length() >= 7) {
             startSquare.piece.promotion = s.charAt(6);
