@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+import java.io.*;
+import java.io.File.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     public int j;
     public int k;
     public boolean gameOver;
+    public Coord[] move;
+    public Coord[] lastMove;
+    public boolean record;
+    public boolean draw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         board = new Board();
+
+        record = false;
+        draw = false;
 
         pl = true;
 
@@ -57,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
                 if (board.tile[y][z] != null) {
                     boardClick[y][z].setText(board.tile[y][z].toString());
                 }
+                else{
+                    boardClick[y][z].setText("");
+                }
             }
         }
 
@@ -64,26 +76,133 @@ public class MainActivity extends AppCompatActivity {
         final int[] i = new int[1];
         i[0] = 0;
 
+        final Button Record = findViewById(R.id.Record);
+        final Button Draw = findViewById(R.id.Draw);
+
+        Record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(record==false) {
+                    record = true;
+
+
+                }
+            }
+        });
+
+        final Button Undo = findViewById(R.id.Undo);
+
+        final Button NewGame = findViewById(R.id.NewGame);
+
         for (i[0] = 0; i[0] < 200; i[0]++) {
-            final Coord[] move = new Coord[2];
+            move = new Coord[2];
             gameOver = false;
             move[0] = new Coord();
             move[1] = new Coord();
 
+            NewGame.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    board = new Board();
+
+                    for (int y = 0; y < 8; y++) {
+                        for (int z = 0; z < 8; z++) {
+                            if (board.tile[y][z] != null) {
+                                boardClick[y][z].setText(board.tile[y][z].toString());
+                            }
+                            else{
+                                boardClick[y][z].setText("");
+                            }
+                        }
+                    }
+
+                    move[0] = new Coord();
+                    move[1] = new Coord();
+                    lastMove = null;
+                    draw = false;
+                    pl = true;
+                    gameOver=false;
+                }
+            });
+
             Resign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    gameOver = true;
-                    if (gameOver) {
-                        Move.setText("GameOver");
+                    if(!gameOver) {
+                        gameOver = true;
+
+                        if(pl) {
+                            Move.setText("Resign");
+                            Move.setText("Black");
+                        }
+                        else{
+                            Move.setText("Resign");
+                            Move.setText("White");
+                        }
+
+                        board = new Board();
+
+                        for (int y = 0; y < 8; y++) {
+                            for (int z = 0; z < 8; z++) {
+                                if (board.tile[y][z] != null) {
+                                    boardClick[y][z].setText(board.tile[y][z].toString());
+                                }
+                                else{
+                                    boardClick[y][z].setText("");
+                                }
+                            }
+                        }
+
+                        move[0] = new Coord();
+                        move[1] = new Coord();
+                        lastMove = null;
+                        pl = true;
+                        draw = false;
+                        gameOver=false;
+                    }
+                    else if (gameOver) {
+
+
+                        board = new Board();
+
+                        for (int y = 0; y < 8; y++) {
+                            for (int z = 0; z < 8; z++) {
+                                if (board.tile[y][z] != null) {
+                                    boardClick[y][z].setText(board.tile[y][z].toString());
+                                }
+                                else{
+                                    boardClick[y][z].setText("");
+                                }
+                            }
+                        }
+
+                        move[0] = new Coord();
+                        move[1] = new Coord();
+                        lastMove = null;
+                        pl = true;
+                        draw = false;
+                        gameOver=false;
                     }
                 }
             });
 
-            if (gameOver) {
-                Move.setText("");
-                break;
-            }
+            Undo.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    if ((move[0].getX()!=-1)||(move[1].getX()!=-1)){
+                        move[0]= new Coord(-1,-1);
+                        move[1]=new Coord(-1,-1);
+                        Move.setText("");
+                    }
+                    /*else{
+                        if(lastMove!=null) {
+                            undo(lastMove[0],lastMove[1],!pl);
+                            Move.setText("");
+                        }
+                    }*/
+                }
+            });
+
 
             final int[] m = new int[1];
             m[0] = 0;
@@ -1037,11 +1156,231 @@ public class MainActivity extends AppCompatActivity {
 
             }
             //if((move[0].getX()!=-1)&&(move[1].getX()!=-1)) {
-                Mov.setOnClickListener(new View.OnClickListener() {
+                Draw.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (movePiece(move[0], move[1], pl)) {
+                        if(draw){
+                            Move.setText("Draw agreed");
+                            Move.setText("Draw");
+                            board = new Board();
+
+                            for (int y = 0; y < 8; y++) {
+                                for (int z = 0; z < 8; z++) {
+                                    if (board.tile[y][z] != null) {
+                                        boardClick[y][z].setText(board.tile[y][z].toString());
+                                    }
+                                    else{
+                                        boardClick[y][z].setText("");
+                                    }
+                                }
+                            }
+
+                            move[0] = new Coord();
+                            move[1] = new Coord();
+                            lastMove = null;
+                            draw = false;
+                            pl = true;
+                            gameOver=false;
+
+                        }
+                        else if(pl && whiteCheck()){
+                            Board backup = board;
+                            if(movePiece(move[0],move[1],pl,backup)){
+                                movePiece(move[0],move[1],pl,backup);
+                                if(whiteCheck(backup)){
+
+                                    move[0]= new Coord();
+                                    move[1]=new Coord();
+                                    Move.setText("");
+                                }
+                                else{
+                                    draw = true;
+                                    movePiece(move[0], move[1], pl);
+                                    lastMove = move;
+                                    move[0] = new Coord(-1, -1);
+                                    move[1] = new Coord(-1, -1);
+                                    Move.setText("");
+
+                                    for (m[0] = 0; m[0] < 8; m[0]++) {
+                                        for (n[0] = 0; n[0] < 8; n[0]++) {
+                                            if (board.tile[m[0]][n[0]] != null) {
+                                                if (board.tile[m[0]][n[0]].player) {
+                                                    //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                                    boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                                } else {
+                                                    //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                                    boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                                }
+                                            }
+                                            else if(board.tile[m[0]][n[0]]==null){
+                                                boardClick[m[0]][n[0]].setText("");
+                                            }
+                                        }
+                                    }
+
+
+
+                                    if (pl) {
+                                        pl = false;
+                                    } else {
+                                        pl = true;
+                                    }
+
+                                    if(stalemate(pl)){
+                                        Move.setText("Stalemate");
+                                        Move.setText("Draw");
+                                        board = new Board();
+
+                                        for (int y = 0; y < 8; y++) {
+                                            for (int z = 0; z < 8; z++) {
+                                                if (board.tile[y][z] != null) {
+                                                    boardClick[y][z].setText(board.tile[y][z].toString());
+                                                }
+                                                else{
+                                                    boardClick[y][z].setText("");
+                                                }
+                                            }
+                                        }
+
+                                        move[0] = new Coord();
+                                        move[1] = new Coord();
+                                        lastMove = null;
+                                        draw = false;
+                                        pl = true;
+                                        gameOver=false;
+                                    }
+
+                                    if(detectMate(pl)) {
+                                        Move.setText("Checkmate");
+                                        if (pl) {
+                                            Move.setText("Black");
+                                        } else {
+                                            Move.setText("White");
+                                        }
+                                        board = new Board();
+
+                                        for (int y = 0; y < 8; y++) {
+                                            for (int z = 0; z < 8; z++) {
+                                                if (board.tile[y][z] != null) {
+                                                    boardClick[y][z].setText(board.tile[y][z].toString());
+                                                } else {
+                                                    boardClick[y][z].setText("");
+                                                }
+                                            }
+                                        }
+
+                                        move[0] = new Coord();
+                                        move[1] = new Coord();
+                                        lastMove = null;
+                                        draw = false;
+                                        pl = true;
+                                        gameOver = false;
+                                    }
+                                }
+                            }
+                        }
+                        else if(!pl && blackCheck()){
+                            Board backup = board;
+                            if(movePiece(move[0],move[1],pl,backup)){
+                                movePiece(move[0],move[1],pl,backup);
+                                if(blackCheck(backup)){
+                                    move[0]= new Coord(-1,-1);
+                                    move[1]=new Coord(-1,-1);
+                                    Move.setText("");
+                                }
+                                else{
+                                    draw = true;
+                                    movePiece(move[0], move[1], pl);
+                                    lastMove = move;
+                                    move[0] = new Coord(-1, -1);
+                                    move[1] = new Coord(-1, -1);
+                                    Move.setText("");
+
+                                    for (m[0] = 0; m[0] < 8; m[0]++) {
+                                        for (n[0] = 0; n[0] < 8; n[0]++) {
+                                            if (board.tile[m[0]][n[0]] != null) {
+                                                if (board.tile[m[0]][n[0]].player) {
+                                                    //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                                    boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                                } else {
+                                                    //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                                    boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                                }
+                                            }
+                                            else if(board.tile[m[0]][n[0]]==null){
+                                                boardClick[m[0]][n[0]].setText("");
+                                            }
+                                        }
+                                    }
+
+
+
+                                    if (pl) {
+                                        pl = false;
+                                    } else {
+                                        pl = true;
+                                    }
+
+                                    if(stalemate(pl)){
+                                        Move.setText("Stalemate");
+                                        Move.setText("Draw");
+                                        board = new Board();
+
+                                        for (int y = 0; y < 8; y++) {
+                                            for (int z = 0; z < 8; z++) {
+                                                if (board.tile[y][z] != null) {
+                                                    boardClick[y][z].setText(board.tile[y][z].toString());
+                                                }
+                                                else{
+                                                    boardClick[y][z].setText("");
+                                                }
+                                            }
+                                        }
+
+                                        move[0] = new Coord();
+                                        move[1] = new Coord();
+                                        lastMove = null;
+                                        draw = false;
+                                        pl = true;
+                                        gameOver=false;
+                                    }
+
+                                    if(detectMate(pl)) {
+                                        Move.setText("Checkmate");
+                                        if (pl) {
+                                            Move.setText("Black");
+                                        } else {
+                                            Move.setText("White");
+                                        }
+                                        board = new Board();
+
+                                        for (int y = 0; y < 8; y++) {
+                                            for (int z = 0; z < 8; z++) {
+                                                if (board.tile[y][z] != null) {
+                                                    boardClick[y][z].setText(board.tile[y][z].toString());
+                                                } else {
+                                                    boardClick[y][z].setText("");
+                                                }
+                                            }
+                                        }
+
+                                        move[0] = new Coord();
+                                        move[1] = new Coord();
+                                        lastMove = null;
+                                        draw = false;
+                                        pl = true;
+                                        gameOver = false;
+                                    }
+                                }
+                            }
+                        }
+                        else if (movePiece(move[0], move[1], pl)) {
+
+
+
+                            draw = true;
                             movePiece(move[0], move[1], pl);
+                            lastMove = move;
                             move[0] = new Coord(-1, -1);
                             move[1] = new Coord(-1, -1);
                             Move.setText("");
@@ -1063,11 +1402,69 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
 
+
+
                             if (pl) {
                                 pl = false;
                             } else {
                                 pl = true;
                             }
+
+                            if(stalemate(pl)){
+                                Move.setText("Stalemate");
+                                Move.setText("Draw");
+                                board = new Board();
+
+                                for (int y = 0; y < 8; y++) {
+                                    for (int z = 0; z < 8; z++) {
+                                        if (board.tile[y][z] != null) {
+                                            boardClick[y][z].setText(board.tile[y][z].toString());
+                                        }
+                                        else{
+                                            boardClick[y][z].setText("");
+                                        }
+                                    }
+                                }
+
+                                move[0] = new Coord();
+                                move[1] = new Coord();
+                                lastMove = null;
+                                draw = false;
+                                pl = true;
+                                gameOver=false;
+                            }
+
+                            if(detectMate(pl)){
+                                Move.setText("Checkmate");
+                                if(pl) {
+                                    Move.setText("Black");
+                                }
+                                else{
+                                    Move.setText("White");
+                                }
+                                board = new Board();
+
+                                for (int y = 0; y < 8; y++) {
+                                    for (int z = 0; z < 8; z++) {
+                                        if (board.tile[y][z] != null) {
+                                            boardClick[y][z].setText(board.tile[y][z].toString());
+                                        }
+                                        else{
+                                            boardClick[y][z].setText("");
+                                        }
+                                    }
+                                }
+
+                                move[0] = new Coord();
+                                move[1] = new Coord();
+                                lastMove = null;
+                                draw = false;
+                                pl = true;
+                                gameOver=false;
+                            }
+
+
+
                         } else {
                             move[0] = new Coord(-1, -1);
                             move[1] = new Coord(-1, -1);
@@ -1076,6 +1473,297 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+            Mov.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(pl && whiteCheck()){
+                        Board backup = board;
+                        if(movePiece(move[0],move[1],pl,backup)){
+                            movePiece(move[0],move[1],pl,backup);
+                            if(whiteCheck(backup)){
+                                move[0]= new Coord();
+                                move[1]=new Coord();
+                                Move.setText("");
+                            }
+                            else{
+                                draw = false;
+                                movePiece(move[0], move[1], pl);
+                                lastMove = move;
+                                move[0] = new Coord(-1, -1);
+                                move[1] = new Coord(-1, -1);
+                                Move.setText("");
+
+                                for (m[0] = 0; m[0] < 8; m[0]++) {
+                                    for (n[0] = 0; n[0] < 8; n[0]++) {
+                                        if (board.tile[m[0]][n[0]] != null) {
+                                            if (board.tile[m[0]][n[0]].player) {
+                                                //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                                boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                            } else {
+                                                //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                                boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                            }
+                                        }
+                                        else if(board.tile[m[0]][n[0]]==null){
+                                            boardClick[m[0]][n[0]].setText("");
+                                        }
+                                    }
+                                }
+
+
+
+                                if (pl) {
+                                    pl = false;
+                                } else {
+                                    pl = true;
+                                }
+
+                                if(stalemate(pl)){
+                                    Move.setText("Stalemate");
+                                    Move.setText("Draw");
+                                    board = new Board();
+
+                                    for (int y = 0; y < 8; y++) {
+                                        for (int z = 0; z < 8; z++) {
+                                            if (board.tile[y][z] != null) {
+                                                boardClick[y][z].setText(board.tile[y][z].toString());
+                                            }
+                                            else{
+                                                boardClick[y][z].setText("");
+                                            }
+                                        }
+                                    }
+
+                                    move[0] = new Coord();
+                                    move[1] = new Coord();
+                                    lastMove = null;
+                                    draw = false;
+                                    pl = true;
+                                    gameOver=false;
+                                }
+
+                                if(detectMate(pl)) {
+                                    Move.setText("Checkmate");
+                                    if (pl) {
+                                        Move.setText("Black");
+                                    } else {
+                                        Move.setText("White");
+                                    }
+                                    board = new Board();
+
+                                    for (int y = 0; y < 8; y++) {
+                                        for (int z = 0; z < 8; z++) {
+                                            if (board.tile[y][z] != null) {
+                                                boardClick[y][z].setText(board.tile[y][z].toString());
+                                            } else {
+                                                boardClick[y][z].setText("");
+                                            }
+                                        }
+                                    }
+
+                                    move[0] = new Coord();
+                                    move[1] = new Coord();
+                                    lastMove = null;
+                                    draw = false;
+                                    pl = true;
+                                    gameOver = false;
+                                }
+                            }
+                        }
+                    }
+                    else if(!pl && blackCheck()){
+                        Board backup = board;
+                        if(movePiece(move[0],move[1],pl,backup)){
+                            movePiece(move[0],move[1],pl,backup);
+                            if(blackCheck(backup)){
+                                move[0]= new Coord();
+                                move[1]=new Coord();
+                                Move.setText("");
+                            }
+                            else{
+                                draw = false;
+                                movePiece(move[0], move[1], pl);
+                                lastMove = move;
+                                move[0] = new Coord(-1, -1);
+                                move[1] = new Coord(-1, -1);
+                                Move.setText("");
+
+                                for (m[0] = 0; m[0] < 8; m[0]++) {
+                                    for (n[0] = 0; n[0] < 8; n[0]++) {
+                                        if (board.tile[m[0]][n[0]] != null) {
+                                            if (board.tile[m[0]][n[0]].player) {
+                                                //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                                boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                            } else {
+                                                //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                                boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                            }
+                                        }
+                                        else if(board.tile[m[0]][n[0]]==null){
+                                            boardClick[m[0]][n[0]].setText("");
+                                        }
+                                    }
+                                }
+
+
+
+                                if (pl) {
+                                    pl = false;
+                                } else {
+                                    pl = true;
+                                }
+
+                                if(stalemate(pl)){
+                                    Move.setText("Stalemate");
+                                    Move.setText("Draw");
+                                    board = new Board();
+
+                                    for (int y = 0; y < 8; y++) {
+                                        for (int z = 0; z < 8; z++) {
+                                            if (board.tile[y][z] != null) {
+                                                boardClick[y][z].setText(board.tile[y][z].toString());
+                                            }
+                                            else{
+                                                boardClick[y][z].setText("");
+                                            }
+                                        }
+                                    }
+
+                                    move[0] = new Coord();
+                                    move[1] = new Coord();
+                                    lastMove = null;
+                                    draw = false;
+                                    pl = true;
+                                    gameOver=false;
+                                }
+
+                                if(detectMate(pl)) {
+                                    Move.setText("Checkmate");
+                                    if (pl) {
+                                        Move.setText("Black");
+                                    } else {
+                                        Move.setText("White");
+                                    }
+                                    board = new Board();
+
+                                    for (int y = 0; y < 8; y++) {
+                                        for (int z = 0; z < 8; z++) {
+                                            if (board.tile[y][z] != null) {
+                                                boardClick[y][z].setText(board.tile[y][z].toString());
+                                            } else {
+                                                boardClick[y][z].setText("");
+                                            }
+                                        }
+                                    }
+
+                                    move[0] = new Coord();
+                                    move[1] = new Coord();
+                                    lastMove = null;
+                                    draw = false;
+                                    pl = true;
+                                    gameOver = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (movePiece(move[0], move[1], pl)) {
+
+
+
+                        draw = false;
+                        movePiece(move[0], move[1], pl);
+                        lastMove = move;
+                        move[0] = new Coord(-1, -1);
+                        move[1] = new Coord(-1, -1);
+                        Move.setText("");
+
+                        for (m[0] = 0; m[0] < 8; m[0]++) {
+                            for (n[0] = 0; n[0] < 8; n[0]++) {
+                                if (board.tile[m[0]][n[0]] != null) {
+                                    if (board.tile[m[0]][n[0]].player) {
+                                        //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                        boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                    } else {
+                                        //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                        boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                    }
+                                }
+                                else if(board.tile[m[0]][n[0]]==null){
+                                    boardClick[m[0]][n[0]].setText("");
+                                }
+                            }
+                        }
+
+
+
+                        if (pl) {
+                            pl = false;
+                        } else {
+                            pl = true;
+                        }
+
+                        if(stalemate(pl)){
+                            Move.setText("Stalemate");
+                            Move.setText("Draw");
+                            board = new Board();
+
+                            for (int y = 0; y < 8; y++) {
+                                for (int z = 0; z < 8; z++) {
+                                    if (board.tile[y][z] != null) {
+                                        boardClick[y][z].setText(board.tile[y][z].toString());
+                                    }
+                                    else{
+                                        boardClick[y][z].setText("");
+                                    }
+                                }
+                            }
+
+                            move[0] = new Coord();
+                            move[1] = new Coord();
+                            lastMove = null;
+                            draw = false;
+                            pl = true;
+                            gameOver=false;
+                        }
+
+                        if(detectMate(pl)){
+                            Move.setText("Checkmate");
+                            if(pl) {
+                                Move.setText("Black");
+                            }
+                            else{
+                                Move.setText("White");
+                            }
+                            board = new Board();
+
+                            for (int y = 0; y < 8; y++) {
+                                for (int z = 0; z < 8; z++) {
+                                    if (board.tile[y][z] != null) {
+                                        boardClick[y][z].setText(board.tile[y][z].toString());
+                                    }
+                                    else{
+                                        boardClick[y][z].setText("");
+                                    }
+                                }
+                            }
+
+                            move[0] = new Coord();
+                            move[1] = new Coord();
+                            lastMove = null;
+                            draw = false;
+                            pl = true;
+                            gameOver=false;
+                        }
+
+
+
+                    } else {
+                        move[0] = new Coord(-1, -1);
+                        move[1] = new Coord(-1, -1);
+                        Move.setText("");
+                    }
+                }
+            });
 
 
             //}
@@ -1143,6 +1831,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return y;
+    }
+    private static void undo(Coord start, Coord end, boolean player) {
+        board.tile[end.getY()][end.getX()] = board.tile[start.getY()][start.getX()];
+        board.tile[start.getY()][start.getX()] = null;
     }
 
 
@@ -1252,6 +1944,66 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private static boolean movePiece(Coord start, Coord end, boolean player, Board b) {
+
+
+
+
+        //Check to make sure square is not blank
+        if(b.tile[start.getY()][start.getX()] == null)
+            return false;
+
+        Tile startSquare = b.tile[start.getY()][start.getX()];
+
+        //Check to make sure player is moving their own piece
+        if((startSquare.player == false && player == true) ||
+                (startSquare.player == true && player == false)) {
+
+            return false;
+        }
+
+        //Check input included a promotion character
+        /*if(s.length() >= 7) {
+            startSquare.piece.promotion = s.charAt(6);
+        }
+
+        //Check to make sure the specific piece (pawn, bishop, etc) is allowed to move in that direction
+        if(!startSquare.piece.legalMove(start, end, board))
+            return false;
+            */
+
+        //Player executed en passant
+        if(startSquare.piece.enpassant) {
+            b.tile[start.getY()][end.getX()] = null;
+        }
+
+        //Move Rook piece according to direction
+        if(startSquare.piece.castling == '1') {
+            b.tile[0][3] = b.tile[0][0];
+            b.tile[0][0] = null;
+        }
+        if(startSquare.piece.castling == '2') {
+            b.tile[0][5] = b.tile[0][7];
+            b.tile[0][7] = null;
+        }
+        if(startSquare.piece.castling == '3') {
+            b.tile[7][3] = b.tile[7][0];
+            b.tile[7][0] = null;
+        }
+        if(startSquare.piece.castling == '4') {
+            b.tile[7][5] = b.tile[7][7];
+            b.tile[7][7] = null;
+        }
+
+
+        //Move the piece
+        b.tile[end.getY()][end.getX()] = b.tile[start.getY()][start.getX()];
+        b.tile[start.getY()][start.getX()] = null;
+
+        return true;
+
+    }
+
 
     private static void resetEPvalue(boolean player, Board board) {
 
@@ -1283,7 +2035,7 @@ public class MainActivity extends AppCompatActivity {
 
         return new Coord(x, y);
     }
-    private static boolean stalemate(boolean player, Board board) {
+    private static boolean stalemate(boolean player) {
         Coord wK_pos = null, bK_pos = null, test;
         if (!player) {
             for(int i = 0; i < 8; i++) {
@@ -1462,6 +2214,47 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    private static boolean whiteCheck(Board b) {
+        /**
+         * Step 1) Find the position of white's king
+         * Step 2) Traverse the board to find all black pieces
+         * Step 3) Find distance to current piece to white's King piece
+         * Step 4) Test if piece can reach white's King piece
+         */
+        //Holds the location of each player's king, and the piece to compare
+        Coord wK_pos = null, test;
+
+        //Step 1)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = b.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }
+                else if((s.piece instanceof King) && s.player == true)
+                    wK_pos = new Coord(j , i);
+
+            }
+
+        }
+
+        //Step 2 and 3)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = b.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }  else if(s.player == false) {
+                    test = new Coord(j , i);
+                    if(s.piece.legalMove(test, wK_pos, b))
+                        return true; //White in check
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Detects if white's king is in check
      *
@@ -1500,6 +2293,47 @@ public class MainActivity extends AppCompatActivity {
                 }  else if(s.player == true) {
                     test = new Coord(j , i);
                     if(s.piece.legalMove(test, bK_pos, board))
+                        return true; //Black in check
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean blackCheck(Board b) {
+        /**
+         * Step 1) Find the position of white's king
+         * Step 2) Traverse the board to find all black pieces
+         * Step 3) Find distance to current piece to white's King piece
+         * Step 4) Test if piece can reach white's King piece
+         */
+        //Holds the location of each player's king, and the piece to compare
+        Coord bK_pos = null, test;
+
+        //Step 1)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = b.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }
+                else if((s.piece instanceof King) && s.player == false)
+                    bK_pos = new Coord(j , i);
+
+            }
+
+        }
+
+        //Step 2 and 3)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = b.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }  else if(s.player == true) {
+                    test = new Coord(j , i);
+                    if(s.piece.legalMove(test, bK_pos, b))
                         return true; //Black in check
                 }
             }
