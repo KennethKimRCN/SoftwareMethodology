@@ -1365,6 +1365,207 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    private static boolean detectCheck() {
+        /**
+         * Step 1) Find the position of Kings (This way it
+         * Step 2) Traverse the board to find all pieces
+         * Step 3) Find distance to current piece to enemy's King piece
+         * Step 4) Test if piece can reach ememy's King piece
+         */
+        //Holds the location of each player's king, and the piece to compare
+        Coord wK_pos = null, bK_pos = null, test;
+
+        //Step 1)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = board.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }
+                else if((s.piece instanceof King) && s.player == true)
+                    wK_pos = new Coord(j , i);
+                else if((s.piece instanceof  King) && s.player == false)
+                    bK_pos = new Coord(j , i);
+
+            }
+
+        }
+
+        //Step 2 and 3)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = board.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                } else if(s.player == true) {
+                    test = new Coord(j , i);
+                    if(s.piece.legalMove(test, bK_pos, board)) {
+                        return true;    //Black in check
+
+                    }
+                } else if(s.player == false) {
+                    test = new Coord(j , i);
+                    if(s.piece.legalMove(test, wK_pos, board)) {
+                        return true;    //White in check
+
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Detects if white's king is in check
+     *
+     * @return True if a player is in check, false otherwise
+     */
+    private static boolean whiteCheck() {
+        /**
+         * Step 1) Find the position of white's king
+         * Step 2) Traverse the board to find all black pieces
+         * Step 3) Find distance to current piece to white's King piece
+         * Step 4) Test if piece can reach white's King piece
+         */
+        //Holds the location of each player's king, and the piece to compare
+        Coord wK_pos = null, test;
+
+        //Step 1)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = board.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }
+                else if((s.piece instanceof King) && s.player == true)
+                    wK_pos = new Coord(j , i);
+
+            }
+
+        }
+
+        //Step 2 and 3)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = board.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }  else if(s.player == false) {
+                    test = new Coord(j , i);
+                    if(s.piece.legalMove(test, wK_pos, board))
+                        return true; //White in check
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Detects if white's king is in check
+     *
+     * @return True if a player is in check, false otherwise
+     */
+    private static boolean blackCheck() {
+        /**
+         * Step 1) Find the position of white's king
+         * Step 2) Traverse the board to find all black pieces
+         * Step 3) Find distance to current piece to white's King piece
+         * Step 4) Test if piece can reach white's King piece
+         */
+        //Holds the location of each player's king, and the piece to compare
+        Coord bK_pos = null, test;
+
+        //Step 1)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = board.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }
+                else if((s.piece instanceof King) && s.player == false)
+                    bK_pos = new Coord(j , i);
+
+            }
+
+        }
+
+        //Step 2 and 3)
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                Tile s = board.tile[i][j];
+                if(s == null) {
+                    //Skip null spot
+                }  else if(s.player == true) {
+                    test = new Coord(j , i);
+                    if(s.piece.legalMove(test, bK_pos, board))
+                        return true; //Black in check
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Detects if a player is in Checkmate
+     *
+     * @param p The player to check for checkmate (w or b)
+     * @return True if player is in checkmate, false otherwise
+     */
+    private static boolean detectMate(boolean p) {
+
+        //Saves the firstMove variable
+        boolean firstMove;
+
+        //Loop through board and find white's pieces
+        for(int a = 0; a < 8; a++) {
+            for(int b = 0; b < 8; b++) {
+                if(board.tile[a][b] != null && board.tile[a][b].player == p) {
+                    Coord start = new Coord(b , a);
+
+                    //Check every piece on the board to see if it can move there
+                    for(int c = 0; c < 8; c++) {
+                        for(int d = 0; d < 8; d++) {
+                            Coord end = new Coord(d, c);
+
+                            //Save firstMove variable
+                            firstMove = board.tile[a][b].piece.firstMove;
+
+                            //It can move to given piece
+                            if(board.tile[a][b].piece.legalMove(start, end, board)) {
+
+                                //Move the piece
+                                Tile startSquare = board.tile[a][b];
+                                Tile endSquare = board.tile[end.getY()][end.getX()];
+                                board.tile[end.getY()][end.getX()] = board.tile[a][b];
+                                board.tile[a][b] = null;
+
+                                //Found a situation where player can move piece and not be in check anymore
+                                if(!detectCheck()) {
+                                    board.tile[end.getY()][end.getX()] = endSquare;
+                                    board.tile[a][b] = startSquare;
+                                    return false;
+                                }
+
+                                //Put the board back
+                                board.tile[end.getY()][end.getX()] = endSquare;
+                                board.tile[a][b] = startSquare;
+
+                                //Reset the firstMove variable
+                                board.tile[a][b].piece.firstMove = firstMove;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return true;
+    }
 
 
 
