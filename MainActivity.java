@@ -14,11 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.Button;
+import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Board b;
+    public static Board board;
+    public boolean pl;
+    public int j;
+    public int k;
+    public boolean gameOver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,39 +32,56 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        b = new Board();
+        board = new Board();
+
+        pl = true;
 
 
         final Button Resign = findViewById(R.id.Resign);
+        final TextView Move = findViewById(R.id.Move);
+        Move.setText("");
+
+        final Button Mov = findViewById(R.id.Mov);
+
+        //Resign.setText(b.tile[0][0].piece.toString());
 
         final Button[][] boardClick =
-                {{findViewById(R.id.a8),findViewById(R.id.b8),findViewById(R.id.c8),findViewById(R.id.d8),findViewById(R.id.e8),findViewById(R.id.f8),findViewById(R.id.g8),findViewById(R.id.h8)},{findViewById(R.id.a7),findViewById(R.id.b7),findViewById(R.id.c7),findViewById(R.id.d7),findViewById(R.id.e7),findViewById(R.id.f7),findViewById(R.id.g7),findViewById(R.id.h7)},
-                        {findViewById(R.id.a6),findViewById(R.id.b6),findViewById(R.id.c6),findViewById(R.id.d6),findViewById(R.id.e6),findViewById(R.id.f6),findViewById(R.id.g6),findViewById(R.id.h6)},{findViewById(R.id.a5),findViewById(R.id.b5),findViewById(R.id.c5),findViewById(R.id.d5),findViewById(R.id.e5),findViewById(R.id.f5),findViewById(R.id.g5),findViewById(R.id.h5)},
-                        {findViewById(R.id.a4),findViewById(R.id.b4),findViewById(R.id.c4),findViewById(R.id.d4),findViewById(R.id.e4),findViewById(R.id.f4),findViewById(R.id.g4),findViewById(R.id.h4)},{findViewById(R.id.a3),findViewById(R.id.b3),findViewById(R.id.c3),findViewById(R.id.d3),findViewById(R.id.e3),findViewById(R.id.f3),findViewById(R.id.g3),findViewById(R.id.h3)},
-                        {findViewById(R.id.a2),findViewById(R.id.b2),findViewById(R.id.c2),findViewById(R.id.d2),findViewById(R.id.e2),findViewById(R.id.f2),findViewById(R.id.g2),findViewById(R.id.h2)},{findViewById(R.id.a1),findViewById(R.id.b1),findViewById(R.id.c1),findViewById(R.id.d1),findViewById(R.id.e1),findViewById(R.id.f1),findViewById(R.id.g1),findViewById(R.id.h1)}};
+                {{findViewById(R.id.a8), findViewById(R.id.b8), findViewById(R.id.c8), findViewById(R.id.d8), findViewById(R.id.e8), findViewById(R.id.f8), findViewById(R.id.g8), findViewById(R.id.h8)}, {findViewById(R.id.a7), findViewById(R.id.b7), findViewById(R.id.c7), findViewById(R.id.d7), findViewById(R.id.e7), findViewById(R.id.f7), findViewById(R.id.g7), findViewById(R.id.h7)},
+                        {findViewById(R.id.a6), findViewById(R.id.b6), findViewById(R.id.c6), findViewById(R.id.d6), findViewById(R.id.e6), findViewById(R.id.f6), findViewById(R.id.g6), findViewById(R.id.h6)}, {findViewById(R.id.a5), findViewById(R.id.b5), findViewById(R.id.c5), findViewById(R.id.d5), findViewById(R.id.e5), findViewById(R.id.f5), findViewById(R.id.g5), findViewById(R.id.h5)},
+                        {findViewById(R.id.a4), findViewById(R.id.b4), findViewById(R.id.c4), findViewById(R.id.d4), findViewById(R.id.e4), findViewById(R.id.f4), findViewById(R.id.g4), findViewById(R.id.h4)}, {findViewById(R.id.a3), findViewById(R.id.b3), findViewById(R.id.c3), findViewById(R.id.d3), findViewById(R.id.e3), findViewById(R.id.f3), findViewById(R.id.g3), findViewById(R.id.h3)},
+                        {findViewById(R.id.a2), findViewById(R.id.b2), findViewById(R.id.c2), findViewById(R.id.d2), findViewById(R.id.e2), findViewById(R.id.f2), findViewById(R.id.g2), findViewById(R.id.h2)}, {findViewById(R.id.a1), findViewById(R.id.b1), findViewById(R.id.c1), findViewById(R.id.d1), findViewById(R.id.e1), findViewById(R.id.f1), findViewById(R.id.g1), findViewById(R.id.h1)}};
+
+
+        for (int y = 0; y < 8; y++) {
+            for (int z = 0; z < 8; z++) {
+                if (board.tile[y][z] != null) {
+                    boardClick[y][z].setText(board.tile[y][z].toString());
+                }
+            }
+        }
+
 
         final int[] i = new int[1];
-        i[0]=0;
+        i[0] = 0;
 
-        for(i[0]=0;i[0]<200;i[0]++){
-            final boolean[] gameOver = new boolean[1];
+        for (i[0] = 0; i[0] < 200; i[0]++) {
             final Coord[] move = new Coord[2];
-            gameOver[0]=false;
-            move[0]=new Coord();
-            move[1]=new Coord();
+            gameOver = false;
+            move[0] = new Coord();
+            move[1] = new Coord();
 
             Resign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    gameOver[0] = true;
-                    if(gameOver[0]){
-                        Resign.setText("True");
+                    gameOver = true;
+                    if (gameOver) {
+                        Move.setText("GameOver");
                     }
                 }
             });
 
-            if(gameOver[0]){
-                Resign.setText("aa");
+            if (gameOver) {
+                Move.setText("");
                 break;
             }
 
@@ -69,42 +91,1058 @@ public class MainActivity extends AppCompatActivity {
             final int[] n = new int[1];
             n[0] = 0;
 
-            for(m[0]=0;m[0]<8;m[0]++){
-                for(n[0]=0;n[0]<8;n[0]++){
-                    //boardClick[m[0]][n[0]].setText(m[0]+" "+n[0]);
-                    boardClick[m[0]][n[0]].setText(b.tile[n[0]][m[0]].tosString(b.tile[n[0]][m[0]]));
-                    //this line is giving me trouble
+            for (m[0] = 0; m[0] < 8; m[0]++) {
+                for (n[0] = 0; n[0] < 8; n[0]++) {
+                    if (board.tile[m[0]][n[0]] != null) {
+                        if (board.tile[m[0]][n[0]].player) {
+                            //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                            boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                        } else {
+                            //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                            boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                        }
+                    }
                 }
             }
 
-            if((move[0].getX()==-1)||(move[1].getX()==-1)){
+            if ((move[0].getX() == -1) || (move[1].getX() == -1)) {
+                boardClick[0][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("00");
+                            move[0] = new Coord(0, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 00"));
+                        }
+                    }
+                });
 
-                final int[] j = new int[1];
-                j[0]=0;
-                final int[] k = new int[1];
-                k[0]=0;
+                boardClick[0][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("10");
+                            move[0] = new Coord(1, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 10"));
+                        }
+                    }
+                });
 
-                for(j[0]=0;j[0]<8;j[0]++) {
-                  for (k[0] = 0; k[0] < 8; k[0]++) {
-                    boardClick[j[0]][k[0]].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (move[0].getX() == -1) {
-                                move[0] = new Coord(k[0], j[0]);
-                            } else if (move[1].getX() == -1) {
-                                move[1] = new Coord(k[0], j[0]);
+                boardClick[0][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("20");
+                            move[0] = new Coord(2, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 20"));
+                        }
+                    }
+                });
+
+
+                boardClick[0][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("30");
+                            move[0] = new Coord(3, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 30"));
+                        }
+                    }
+                });
+
+
+                boardClick[0][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("40");
+                            move[0] = new Coord(4, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 40"));
+                        }
+                    }
+                });
+
+
+                boardClick[0][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("50");
+                            move[0] = new Coord(5, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 50"));
+                        }
+                    }
+                });
+
+
+                boardClick[0][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("60");
+                            move[0] = new Coord(6, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 60"));
+                        }
+                    }
+                });
+
+                boardClick[0][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("70");
+                            move[0] = new Coord(7, 0);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,0);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 70"));
+                        }
+                    }
+                });
+                boardClick[3][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("03");
+                            move[0] = new Coord(0, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 03"));
+                        }
+                    }
+                });
+
+                boardClick[3][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("13");
+                            move[0] = new Coord(1, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 13"));
+                        }
+                    }
+                });
+
+                boardClick[3][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("23");
+                            move[0] = new Coord(2, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 23"));
+                        }
+                    }
+                });
+
+
+                boardClick[3][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("33");
+                            move[0] = new Coord(3, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 33"));
+                        }
+                    }
+                });
+
+
+                boardClick[3][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("43");
+                            move[0] = new Coord(4, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 43"));
+                        }
+                    }
+                });
+
+
+                boardClick[3][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("53");
+                            move[0] = new Coord(5, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 53"));
+                        }
+                    }
+                });
+
+
+                boardClick[3][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("63");
+                            move[0] = new Coord(6, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 63"));
+                        }
+                    }
+                });
+
+                boardClick[3][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("73");
+                            move[0] = new Coord(7, 3);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,3);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 73"));
+                        }
+                    }
+                });
+
+                boardClick[2][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("02");
+                            move[0] = new Coord(0, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 02"));
+                        }
+                    }
+                });
+
+                boardClick[2][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("12");
+                            move[0] = new Coord(1, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 12"));
+                        }
+                    }
+                });
+
+                boardClick[2][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("22");
+                            move[0] = new Coord(2, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 22"));
+                        }
+                    }
+                });
+
+
+                boardClick[2][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("32");
+                            move[0] = new Coord(3, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 32"));
+                        }
+                    }
+                });
+
+
+                boardClick[2][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("42");
+                            move[0] = new Coord(4, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 42"));
+                        }
+                    }
+                });
+
+
+                boardClick[2][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("52");
+                            move[0] = new Coord(5, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 52"));
+                        }
+                    }
+                });
+
+
+                boardClick[2][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("62");
+                            move[0] = new Coord(6, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 62"));
+                        }
+                    }
+                });
+
+                boardClick[2][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("72");
+                            move[0] = new Coord(7, 2);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,2);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 72"));
+                        }
+                    }
+                });
+
+                boardClick[1][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("01");
+                            move[0] = new Coord(0, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 01"));
+                        }
+                    }
+                });
+
+                boardClick[1][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("11");
+                            move[0] = new Coord(1, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 11"));
+                        }
+                    }
+                });
+
+                boardClick[1][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("21");
+                            move[0] = new Coord(2, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 21"));
+                        }
+                    }
+                });
+
+
+                boardClick[1][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("31");
+                            move[0] = new Coord(3, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 31"));
+                        }
+                    }
+                });
+
+
+                boardClick[1][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("41");
+                            move[0] = new Coord(4, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 41"));
+                        }
+                    }
+                });
+
+
+                boardClick[1][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("51");
+                            move[0] = new Coord(5, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 51"));
+                        }
+                    }
+                });
+
+
+                boardClick[1][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("61");
+                            move[0] = new Coord(6, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 61"));
+                        }
+                    }
+                });
+
+                boardClick[1][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("71");
+                            move[0] = new Coord(7, 1);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,1);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 71"));
+                        }
+                    }
+                });
+
+                boardClick[4][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("04");
+                            move[0] = new Coord(0, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 04"));
+                        }
+                    }
+                });
+
+                boardClick[4][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("14");
+                            move[0] = new Coord(1, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 14"));
+                        }
+                    }
+                });
+
+                boardClick[4][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("24");
+                            move[0] = new Coord(2, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 24"));
+                        }
+                    }
+                });
+
+
+                boardClick[4][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("34");
+                            move[0] = new Coord(3, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 34"));
+                        }
+                    }
+                });
+
+
+                boardClick[4][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("44");
+                            move[0] = new Coord(4, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 44"));
+                        }
+                    }
+                });
+
+
+                boardClick[4][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("54");
+                            move[0] = new Coord(5, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 54"));
+                        }
+                    }
+                });
+
+
+                boardClick[4][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("64");
+                            move[0] = new Coord(6, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 64"));
+                        }
+                    }
+                });
+
+                boardClick[4][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("74");
+                            move[0] = new Coord(7, 4);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,4);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 74"));
+                        }
+                    }
+                });
+
+                boardClick[5][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("05");
+                            move[0] = new Coord(0, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 05"));
+                        }
+                    }
+                });
+
+                boardClick[5][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("15");
+                            move[0] = new Coord(1, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 15"));
+                        }
+                    }
+                });
+
+                boardClick[5][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("25");
+                            move[0] = new Coord(2, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 25"));
+                        }
+                    }
+                });
+
+
+                boardClick[5][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("35");
+                            move[0] = new Coord(3, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 35"));
+                        }
+                    }
+                });
+
+
+                boardClick[5][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("45");
+                            move[0] = new Coord(4, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 45"));
+                        }
+                    }
+                });
+
+
+                boardClick[5][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("55");
+                            move[0] = new Coord(5, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 55"));
+                        }
+                    }
+                });
+
+
+                boardClick[5][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("65");
+                            move[0] = new Coord(6, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 65"));
+                        }
+                    }
+                });
+
+                boardClick[5][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("75");
+                            move[0] = new Coord(7, 5);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,5);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 75"));
+                        }
+                    }
+                });
+
+                boardClick[6][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("06");
+                            move[0] = new Coord(0, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 06"));
+                        }
+                    }
+                });
+
+                boardClick[6][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("16");
+                            move[0] = new Coord(1, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 16"));
+                        }
+                    }
+                });
+
+                boardClick[6][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("26");
+                            move[0] = new Coord(2, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 26"));
+                        }
+                    }
+                });
+
+
+                boardClick[6][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("36");
+                            move[0] = new Coord(3, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 36"));
+                        }
+                    }
+                });
+
+
+                boardClick[6][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("46");
+                            move[0] = new Coord(4, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 46"));
+                        }
+                    }
+                });
+
+
+                boardClick[6][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("56");
+                            move[0] = new Coord(5, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 56"));
+                        }
+                    }
+                });
+
+
+                boardClick[6][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("66");
+                            move[0] = new Coord(6, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 66"));
+                        }
+                    }
+                });
+
+                boardClick[6][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("76");
+                            move[0] = new Coord(7, 6);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,6);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 76"));
+                        }
+                    }
+                });
+
+                boardClick[7][0].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("07");
+                            move[0] = new Coord(0, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(0,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 07"));
+                        }
+                    }
+                });
+
+                boardClick[7][1].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("17");
+                            move[0] = new Coord(1, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(1,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 17"));
+                        }
+                    }
+                });
+
+                boardClick[7][2].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("27");
+                            move[0] = new Coord(2, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(2,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 27"));
+                        }
+                    }
+                });
+
+
+                boardClick[7][3].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("37");
+                            move[0] = new Coord(3, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(3,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 37"));
+                        }
+                    }
+                });
+
+
+                boardClick[7][4].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("47");
+                            move[0] = new Coord(4, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(4,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 47"));
+                        }
+                    }
+                });
+
+
+                boardClick[7][5].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("57");
+                            move[0] = new Coord(5, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(5,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 57"));
+                        }
+                    }
+                });
+
+
+                boardClick[7][6].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("67");
+                            move[0] = new Coord(6, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(6,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 67"));
+                        }
+                    }
+                });
+
+                boardClick[7][7].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (move[0].getX() == -1) {
+                            Move.setText("77");
+                            move[0] = new Coord(7, 7);
+                        } else if (move[1].getX() == -1){
+                            move[1] = new Coord(7,7);
+                            String a = (String)Move.getText();
+                            Move.setText(a.concat(" 77"));
+                        }
+                    }
+                });
+
+
+
+            }
+            //if((move[0].getX()!=-1)&&(move[1].getX()!=-1)) {
+                Mov.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (movePiece(move[0], move[1], pl)) {
+                            movePiece(move[0], move[1], pl);
+                            move[0] = new Coord(-1, -1);
+                            move[1] = new Coord(-1, -1);
+                            Move.setText("");
+
+                            for (m[0] = 0; m[0] < 8; m[0]++) {
+                                for (n[0] = 0; n[0] < 8; n[0]++) {
+                                    if (board.tile[m[0]][n[0]] != null) {
+                                        if (board.tile[m[0]][n[0]].player) {
+                                            //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                            boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                        } else {
+                                            //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                            boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                        }
+                                    }
+                                    else if(board.tile[m[0]][n[0]]==null){
+                                        boardClick[m[0]][n[0]].setText("");
+                                    }
+                                }
+                            }
+
+                            if (pl) {
+                                pl = false;
+                            } else {
+                                pl = true;
+                            }
+                        } else {
+                            move[0] = new Coord(-1, -1);
+                            move[1] = new Coord(-1, -1);
+                            Move.setText("");
+                        }
+                    }
+                });
+
+
+
+            //}
+
+            /*if((move[0].getX()!=-1)&&(move[1].getX()!=-1)){
+                if(movePiece(move[0],move[1],pl)){
+                    movePiece(move[0],move[1],pl);
+                    move[0]=new Coord(-1,-1);
+                    move[1]=new Coord(-1,-1);
+                    Move.setText("");
+
+                    for (m[0] = 0; m[0] < 8; m[0]++) {
+                        for (n[0] = 0; n[0] < 8; n[0]++) {
+                            if (board.tile[m[0]][n[0]] != null) {
+                                if (board.tile[m[0]][n[0]].player) {
+                                    //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                    boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                } else {
+                                    //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                    boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                }
                             }
                         }
-                    });
-                  }
-                 }
+                    }
+
+                    if(pl){
+                        pl=false;
+                    }
+                    else{
+                        pl = true;
+                    }
+                }
+                else{
+                    move[0]=new Coord(-1,-1);
+                    move[1]=new Coord(-1,-1);
+                    Move.setText("");
+                }
             }
-
-
-
+*/
 
 
         }
+    }
+
+
+    public int getButtonPositionX(Button b, Button[][] b1){
+        int x = -1;
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                if (b1[i][j].equals(b)){
+                    x=i;
+                }
+            }
+        }
+        return x;
+    }
+
+    public int getButtonPositionY(Button b, Button[][] b1){
+        int y = -1;
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                if (b1[i][j].equals(b)){
+                    y=j;
+                }
+            }
+        }
+        return y;
     }
 
 
@@ -149,59 +1187,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public String[] move(){
-        final String[] m = new String[2];
-        m[0] = "";
-        m[1] = "";
-
-        final Button a1 = findViewById(R.id.a1);
-
-        while((m[0].isEmpty()) || (m[1].isEmpty())) {
-
-            a1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!m[0].isEmpty()) {
-                        m[0]="a1";
-                    } else {
-                        m[1]="a1";
-                    }
-                    a1.setText(m[0]+" "+m[1]);
-                }
-            });
 
 
 
-            //if these 5 buttons work I'll add all 64 other buttons
-        }
-
-        return m;
 
 
-
-    }
-
-
-    private static boolean movePiece(String s, boolean player, Board board) {
+    private static boolean movePiece(Coord start, Coord end, boolean player) {
 
 
-        if(!(s.length() == 5 || s.length() == 11))
-            return false;
-
-        if(s.charAt(0) > 'h' || s.charAt(0) < 'a')
-            return false;
-        if(s.charAt(1) > '8' || s.charAt(1) < '1')
-            return false;
-
-        if(s.charAt(2) != ' ')
-            return false;
-        if(s.charAt(3) > 'h' || s.charAt(3) < 'a')
-            return false;
-        if(s.charAt(4) > '8' || s.charAt(4) < '1')
-            return false;
-
-        Coord start = getPosition(s.substring(0,2));
-        Coord end = getPosition(s.substring(3,5));
 
 
         //Check to make sure square is not blank
@@ -218,13 +1211,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Check input included a promotion character
-        if(s.length() >= 7) {
+        /*if(s.length() >= 7) {
             startSquare.piece.promotion = s.charAt(6);
         }
 
         //Check to make sure the specific piece (pawn, bishop, etc) is allowed to move in that direction
         if(!startSquare.piece.legalMove(start, end, board))
             return false;
+            */
 
         //Player executed en passant
         if(startSquare.piece.enpassant) {
