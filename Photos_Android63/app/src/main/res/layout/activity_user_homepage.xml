@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.photos_android.photos_android63.UserHomepage">
+
+    <!--<TextView-->
+        <!--android:id="@+id/wlecomeText"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_gravity="left"-->
+        <!--android:layout_marginStart="12dp"-->
+        <!--android:layout_marginTop="12dp"-->
+        <!--android:text="Your Albums:"-->
+        <!--android:textColor="@android:color/holo_red_light"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textStyle="bold" />-->
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="293dp"
+        android:text="@string/searchBtnTxt" />
+
+    <model.MySpinner
+        android:id="@+id/spinner3"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:prompt="@string/albumOptionsPrompt"
+        tools:visibility="visible" />
+
+    <ListView
+        android:id="@+id/albumsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchButton"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+    </ListView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addAlbumBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|right"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+</RelativeLayout>
