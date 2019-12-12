@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         final TextView Move = findViewById(R.id.Move);
         Move.setText("");
 
+        final Button AI = findViewById(R.id.AI);
+
         final Button Mov = findViewById(R.id.Mov);
 
         //Resign.setText(b.tile[0][0].piece.toString());
@@ -1765,6 +1767,113 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            AI.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    move[0]=new Coord();
+                    move[1]=new Coord();
+
+                    for(int i=0;i<8;i++){
+                        for(int j=0;j<8;j++){
+                            if(board.tile[i][j]!=null){
+                                move[0]=new Coord(j,i);
+                                for(int k=0;k<8;k++){
+                                    for(int l=0;l<8;l++){
+                                        Coord c = new Coord(l,k);
+                                        if(movePiece(move[0],c,pl)){
+                                            movePiece(move[0],c,pl);
+                                            draw = false;
+                                            lastMove = move;
+                                            move[0] = new Coord(-1, -1);
+                                            move[1] = new Coord(-1, -1);
+                                            Move.setText("");
+
+                                            for (m[0] = 0; m[0] < 8; m[0]++) {
+                                                for (n[0] = 0; n[0] < 8; n[0]++) {
+                                                    if (board.tile[m[0]][n[0]] != null) {
+                                                        if (board.tile[m[0]][n[0]].player) {
+                                                            //boardClick[m[0]][n[0]].setTextColor(0x000000);
+                                                            boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                                        } else {
+                                                            //boardClick[m[0]][n[0]].setTextColor(0xffffff);
+                                                            boardClick[m[0]][n[0]].setText(board.tile[m[0]][n[0]].toString());
+                                                        }
+                                                    }
+                                                    else if(board.tile[m[0]][n[0]]==null){
+                                                        boardClick[m[0]][n[0]].setText("");
+                                                    }
+                                                }
+                                            }
+
+
+
+                                            if (pl) {
+                                                pl = false;
+                                            } else {
+                                                pl = true;
+                                            }
+
+                                            if(stalemate(pl)){
+                                                Move.setText("Stalemate");
+                                                Move.setText("Draw");
+                                                board = new Board();
+
+                                                for (int y = 0; y < 8; y++) {
+                                                    for (int z = 0; z < 8; z++) {
+                                                        if (board.tile[y][z] != null) {
+                                                            boardClick[y][z].setText(board.tile[y][z].toString());
+                                                        }
+                                                        else{
+                                                            boardClick[y][z].setText("");
+                                                        }
+                                                    }
+                                                }
+
+                                                move[0] = new Coord();
+                                                move[1] = new Coord();
+                                                lastMove = null;
+                                                draw = false;
+                                                pl = true;
+                                                gameOver=false;
+                                            }
+
+                                            if(detectMate(pl)) {
+                                                Move.setText("Checkmate");
+                                                if (pl) {
+                                                    Move.setText("Black");
+                                                } else {
+                                                    Move.setText("White");
+                                                }
+                                                board = new Board();
+
+                                                for (int y = 0; y < 8; y++) {
+                                                    for (int z = 0; z < 8; z++) {
+                                                        if (board.tile[y][z] != null) {
+                                                            boardClick[y][z].setText(board.tile[y][z].toString());
+                                                        } else {
+                                                            boardClick[y][z].setText("");
+                                                        }
+                                                    }
+                                                }
+
+                                                move[0] = new Coord();
+                                                move[1] = new Coord();
+                                                lastMove = null;
+                                                draw = false;
+                                                pl = true;
+                                                gameOver = false;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
 
             //}
 
@@ -1910,7 +2019,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         if(!player&& blackCheck()){
-            
+
         }
 
         //Check input included a promotion character
