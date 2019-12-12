@@ -11,11 +11,15 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="350dp"
+        android:layout_above="@+id/textView"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/backwardBtn"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="-1dp"
         android:layout_toLeftOf="@id/forwardBtn"
+        android:layout_toRightOf="@id/backwardBtn"
         android:contentDescription="@string/desc"
-        app:srcCompat="@drawable/sample_7"/>
+        app:srcCompat="@drawable/sample_7" />
 
     <Button
         android:id="@+id/backwardBtn"
@@ -53,9 +57,10 @@
             android:id="@+id/addTagValue"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="-1dp"
             android:layout_toRightOf="@id/addTagOptions"
             android:hint="@string/tagValueName"
-            android:inputType="text"/>
+            android:inputType="text" />
 
         <Button
             android:id="@+id/addTagButtonSlideshow"
@@ -81,10 +86,11 @@
     <ListView
         android:id="@+id/tagsOfPhotoSlideshow"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_height="226dp"
         android:layout_below="@id/relativeLayoutForAddTag"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-4dp" />
 
     <TextView
         android:id="@+id/filename"
